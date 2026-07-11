@@ -44,7 +44,7 @@ class Promo_CPT {
 			'singular_name'      => 'Promo objava',
 			'menu_name'          => 'Promo objave',
 			'name_admin_bar'     => 'Promo objava',
-			'add_new'            => 'Dodaj promo objavo',
+			'add_new'            => 'Nova promo objava',
 			'add_new_item'       => 'Dodaj novo promo objavo',
 			'edit_item'          => 'Uredi promo objavo',
 			'new_item'           => 'Nova promo objava',
@@ -52,16 +52,14 @@ class Promo_CPT {
 			'search_items'       => 'Išči promo objave',
 			'not_found'          => 'Ni najdenih promo objav',
 			'not_found_in_trash' => 'Ni promo objav v smeteh',
-			'all_items'          => 'Vse promo objave',
+			'all_items'          => 'Promo objave',
 		);
 
 		$args = array(
 			'labels'        => $labels,
 			'public'        => false,
 			'show_ui'       => true,
-			'show_in_menu'  => true,
-			'menu_position' => 26,
-			'menu_icon'     => 'dashicons-megaphone',
+			'show_in_menu'  => 'edit.php?post_type=ekran',
 			'supports'      => array( 'title', 'editor', 'thumbnail' ),
 			'has_archive'   => false,
 			'rewrite'       => false,

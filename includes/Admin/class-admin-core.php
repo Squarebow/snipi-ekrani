@@ -44,7 +44,7 @@ class SNIPI_Admin_Core {
 			'singular_name'      => 'Ekran',
 			'menu_name'          => 'SNIPI ekrani',
 			'name_admin_bar'     => 'Ekran',
-			'add_new'            => 'Dodaj ekran',
+			'add_new'            => 'Nov ekran',
 			'add_new_item'       => 'Dodaj nov ekran',
 			'edit_item'          => 'Uredi ekran',
 			'new_item'           => 'Nov ekran',
@@ -52,7 +52,7 @@ class SNIPI_Admin_Core {
 			'search_items'       => 'Išči ekrane',
 			'not_found'          => 'Ni najdenih ekranov',
 			'not_found_in_trash' => 'Ni ekranov v smeteh',
-			'all_items'          => 'Vsi ekrani',
+			'all_items'          => 'Ekrani',
 		);
 
 		$args = array(
