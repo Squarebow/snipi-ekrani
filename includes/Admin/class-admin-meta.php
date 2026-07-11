@@ -107,9 +107,29 @@ class SNIPI_Admin_Meta {
 
 		// Promo diapozitiv (v2.4.0)
 
-		// Omogočen - checkbox (1 ali 0)
-		$promo_enabled = isset( $_POST['snipi_promo_enabled'] ) ? '1' : '0';
-		update_post_meta( $post_id, '_snipi_promo_enabled', $promo_enabled );
+		// Primer A: zapolnitev praznega prostora - checkbox (1 ali 0)
+		$promo_fill_enabled = isset( $_POST['snipi_promo_fill_enabled'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_fill_enabled', $promo_fill_enabled );
+
+		// Primer B: celozaslonski prikaz - checkbox (1 ali 0)
+		$promo_takeover_enabled = isset( $_POST['snipi_promo_takeover_enabled'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_takeover_enabled', $promo_takeover_enabled );
+
+		// Primer B: barva ozadja - hex barva
+		if ( isset( $_POST['snipi_promo_takeover_bg_color'] ) ) {
+			$bg_color = sanitize_hex_color( wp_unslash( $_POST['snipi_promo_takeover_bg_color'] ) );
+			update_post_meta( $post_id, '_snipi_promo_takeover_bg_color', $bg_color ?: '' );
+		}
+
+		// Primer B: prikaži logotip - checkbox (1 ali 0)
+		$promo_takeover_show_logo = isset( $_POST['snipi_promo_takeover_show_logo'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_takeover_show_logo', $promo_takeover_show_logo );
+
+		// Primer B: neobvezni napis nad kolonami
+		if ( isset( $_POST['snipi_promo_takeover_heading'] ) ) {
+			$takeover_heading = sanitize_text_field( wp_unslash( $_POST['snipi_promo_takeover_heading'] ) );
+			update_post_meta( $post_id, '_snipi_promo_takeover_heading', $takeover_heading );
+		}
 
 		// Postavitev - whitelist validacija
 		if ( isset( $_POST['snipi_promo_layout'] ) ) {
@@ -173,13 +193,17 @@ class SNIPI_Admin_Meta {
 		$tv_confirm_dialog   = get_post_meta( $post_id, '_snipi_tv_confirm_dialog', true );
 
 		// Promo diapozitiv (v2.4.0)
-		$promo_enabled   = get_post_meta( $post_id, '_snipi_promo_enabled', true );
-		$promo_layout    = get_post_meta( $post_id, '_snipi_promo_layout', true );
-		$promo_col1_id   = get_post_meta( $post_id, '_snipi_promo_col1_id', true );
-		$promo_col2_id   = get_post_meta( $post_id, '_snipi_promo_col2_id', true );
-		$promo_col3_id   = get_post_meta( $post_id, '_snipi_promo_col3_id', true );
-		$promo_duration  = get_post_meta( $post_id, '_snipi_promo_duration', true );
-		$promo_threshold = get_post_meta( $post_id, '_snipi_promo_threshold', true );
+		$promo_fill_enabled          = get_post_meta( $post_id, '_snipi_promo_fill_enabled', true );
+		$promo_takeover_enabled      = get_post_meta( $post_id, '_snipi_promo_takeover_enabled', true );
+		$promo_takeover_bg_color     = get_post_meta( $post_id, '_snipi_promo_takeover_bg_color', true );
+		$promo_takeover_show_logo    = get_post_meta( $post_id, '_snipi_promo_takeover_show_logo', true );
+		$promo_takeover_heading      = get_post_meta( $post_id, '_snipi_promo_takeover_heading', true );
+		$promo_layout                = get_post_meta( $post_id, '_snipi_promo_layout', true );
+		$promo_col1_id               = get_post_meta( $post_id, '_snipi_promo_col1_id', true );
+		$promo_col2_id               = get_post_meta( $post_id, '_snipi_promo_col2_id', true );
+		$promo_col3_id               = get_post_meta( $post_id, '_snipi_promo_col3_id', true );
+		$promo_duration              = get_post_meta( $post_id, '_snipi_promo_duration', true );
+		$promo_threshold             = get_post_meta( $post_id, '_snipi_promo_threshold', true );
 
 		// Nastavi default vrednosti če meta ne obstaja
 		$rows_per_page     = $rows_per_page ?: 8;
@@ -194,9 +218,13 @@ class SNIPI_Admin_Meta {
 		$tv_confirm_dialog   = $tv_confirm_dialog !== '' ? $tv_confirm_dialog : '1';
 
 		// Promo defaults
-		$promo_layout    = $promo_layout ?: 'thirds';
-		$promo_duration  = max( 5, min( 30, intval( $promo_duration ?: 15 ) ) );
-		$promo_threshold = max( 1, min( 10, intval( $promo_threshold ?: 3 ) ) );
+		$promo_takeover_enabled   = $promo_takeover_enabled !== '' ? $promo_takeover_enabled : '0';
+		$promo_takeover_bg_color  = is_string( $promo_takeover_bg_color ) ? $promo_takeover_bg_color : '';
+		$promo_takeover_show_logo = $promo_takeover_show_logo !== '' ? $promo_takeover_show_logo : '1';
+		$promo_takeover_heading   = is_string( $promo_takeover_heading ) ? $promo_takeover_heading : '';
+		$promo_layout             = $promo_layout ?: 'thirds';
+		$promo_duration           = max( 5, min( 30, intval( $promo_duration ?: 15 ) ) );
+		$promo_threshold          = max( 1, min( 10, intval( $promo_threshold ?: 3 ) ) );
 
 		// Izračunaj število dogodkov za danes (če je API ključ nastavljen)
 		$today_events_count = null;
@@ -223,13 +251,17 @@ class SNIPI_Admin_Meta {
 			'tv_mode_override'    => $tv_mode_override,
 			'tv_confirm_dialog'   => $tv_confirm_dialog,
 			// Promo diapozitiv (v2.4.0)
-			'promo_enabled'       => $promo_enabled,
-			'promo_layout'        => $promo_layout,
-			'promo_col1_id'       => intval( $promo_col1_id ),
-			'promo_col2_id'       => intval( $promo_col2_id ),
-			'promo_col3_id'       => intval( $promo_col3_id ),
-			'promo_duration'      => intval( $promo_duration ),
-			'promo_threshold'     => intval( $promo_threshold ),
+			'promo_fill_enabled'       => $promo_fill_enabled,
+			'promo_takeover_enabled'   => $promo_takeover_enabled,
+			'promo_takeover_bg_color'  => $promo_takeover_bg_color,
+			'promo_takeover_show_logo' => $promo_takeover_show_logo,
+			'promo_takeover_heading'   => $promo_takeover_heading,
+			'promo_layout'             => $promo_layout,
+			'promo_col1_id'            => intval( $promo_col1_id ),
+			'promo_col2_id'            => intval( $promo_col2_id ),
+			'promo_col3_id'            => intval( $promo_col3_id ),
+			'promo_duration'           => intval( $promo_duration ),
+			'promo_threshold'          => intval( $promo_threshold ),
 		);
 	}
 

@@ -322,15 +322,21 @@ class SNIPI_Admin_Edit_Screen {
 		<div class="snipi-help-box">
 			<h3><i class="fas fa-images"></i> Navodila za promo diapozitiv</h3>
 
-			<h4><i class="fas fa-toggle-on"></i> Kdaj se prikaže</h4>
-			<p>Promo diapozitiv se prikaže v dveh primerih:</p>
+			<h4><i class="fas fa-toggle-on"></i> Dva neodvisna primera</h4>
+			<p>Primer A in Primer B sta <strong>neodvisna</strong> — vsak ima svoje stikalo. Vklop enega ne vklopi drugega. Oba sta lahko vklopljena hkrati, ali samo eden, ali nobeden.</p>
+
+			<h4><i class="fas fa-layer-group"></i> Primer A — Zapolnitev</h4>
+			<p>Promo diapozitiv se doda kot <strong>dodatna stran</strong> v rotacijo urnika, kadar na zadnji strani ostane vsaj toliko praznih vrstic, kot določa prag. Urnik ostane viden — promo je zgolj dodaten diapozitiv.</p>
 			<ul>
-				<li><strong>Primer A:</strong> Ko na zadnji strani urnika ostane dovolj praznih vrstic (prag), se promo doda kot dodatna stran v rotaciji.</li>
-				<li><strong>Primer B:</strong> Ko za ta dan ni nobenega dogodka, promo nadomesti celoten urnik.</li>
+				<li><strong>Trajanje:</strong> Koliko sekund je promo prikazan (5–30 s).</li>
+				<li><strong>Prag praznih vrstic:</strong> Koliko praznih vrstic mora ostati na zadnji strani (1–10). Nižja vrednost = promo se prikaže pogosteje.</li>
 			</ul>
 
+			<h4><i class="fas fa-expand"></i> Primer B — Celozaslonski prikaz</h4>
+			<p>Ko za ta dan <strong>ni nobenega dogodka</strong>, promo v celoti nadomesti urnik. Ker gre za večjo vizualno spremembo, je ta možnost privzeto <strong>izklopljena</strong> — jo vklopi samo, ko si prepričan, da je vsebina promo objav pripravljena.</p>
+
 			<h4><i class="fas fa-th-large"></i> Postavitev kolon</h4>
-			<p>Izberite razmerje širin za prikaz treh (ali dveh) promo objav vzporedno:</p>
+			<p>Velja za oba primera. Izberite razmerje širin za prikaz promo objav:</p>
 			<ul>
 				<li><strong>1/3 + 1/3 + 1/3</strong> – enake tri kolone</li>
 				<li><strong>1/4 + 1/2 + 1/4</strong> – sredinska kolona je širša</li>
@@ -339,12 +345,6 @@ class SNIPI_Admin_Edit_Screen {
 
 			<h4><i class="fas fa-photo-video"></i> Promo objave</h4>
 			<p>Promo objave upravljate v meniju <strong>Promo objave</strong>. Vsaka objava ima naslov, besedilo (do 200 znakov) in sliko. Iste promo objave so lahko dodeljene večim ekranom.</p>
-
-			<h4><i class="fas fa-clock"></i> Trajanje in prag</h4>
-			<ul>
-				<li><strong>Trajanje:</strong> Koliko sekund je promo diapozitiv prikazan v rotaciji (Primer A).</li>
-				<li><strong>Prag praznih vrstic:</strong> Minimalno število praznih vrstic na zadnji strani urnika, da se promo diapozitiv doda (Primer A). Nižja vrednost = promo se prikaže bolj pogosto.</li>
-			</ul>
 		</div>
 		<?php
 	}

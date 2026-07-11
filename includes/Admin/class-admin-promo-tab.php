@@ -3,9 +3,9 @@
  * SNIPI Admin Promo Tab
  *
  * Vsebina taba "Promo diapozitiv" v edit screenu ekrana.
- * Omogoča izbiro promo objav za prikaz kot statičen diapozitiv —
- * bodisi kot dodatna stran po zadnji strani urnika (primer A)
- * bodisi kot edini prikaz kadar ni dogodkov (primer B).
+ * Dva neodvisna primera:
+ *  A. Zapolnitev — promo se doda kot dodatna stran v rotaciji urnika
+ *  B. Celozaslonski prikaz — promo nadomesti urnik kadar ni dogodkov
  *
  * @package SNIPI_Ekrani
  * @since   2.4.0
@@ -36,7 +36,6 @@ class SNIPI_Admin_Promo_Tab {
 	 * @return void
 	 */
 	public static function render_content( $post_id, $meta ) {
-		// Pridobi vse objavljene promo objave za selecte
 		$promo_posts = get_posts( array(
 			'post_type'      => 'promo_objava',
 			'post_status'    => 'publish',
@@ -48,53 +47,171 @@ class SNIPI_Admin_Promo_Tab {
 		$current_layout = $meta['promo_layout'] ?? 'thirds';
 		?>
 
-		<!-- OMOGOČI PROMO DIAPOZITIV -->
+		<!-- ================================================================
+		     PRIMER A — ZAPOLNITEV PRAZNEGA PROSTORA
+		     ================================================================ -->
 		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Promo diapozitiv', 'snipi-ekrani' ); ?></h3>
+			<h3><?php esc_html_e( 'Primer A — Zapolnitev praznega prostora', 'snipi-ekrani' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'Promo diapozitiv se doda kot dodatna stran v rotacijo urnika, kadar na zadnji strani ostane dovolj praznih vrstic.', 'snipi-ekrani' ); ?>
+			</p>
 
 			<label class="snipi-checkbox-label">
 				<input
 					type="checkbox"
-					id="snipi_promo_enabled"
-					name="snipi_promo_enabled"
+					id="snipi_promo_fill_enabled"
+					name="snipi_promo_fill_enabled"
 					value="1"
-					<?php checked( $meta['promo_enabled'], '1' ); ?>
+					<?php checked( $meta['promo_fill_enabled'], '1' ); ?>
 				/>
-				<span><?php esc_html_e( 'Omogoči promo diapozitiv', 'snipi-ekrani' ); ?></span>
+				<span><?php esc_html_e( 'Omogoči zapolnitev praznega prostora', 'snipi-ekrani' ); ?></span>
 			</label>
+
+			<div class="snipi-field-group snipi-field-group--inline" style="margin-top:12px;">
+
+				<div class="snipi-field-inline">
+					<label for="snipi_promo_duration" class="snipi-label">
+						<?php esc_html_e( 'Trajanje (s)', 'snipi-ekrani' ); ?>
+					</label>
+					<input
+						type="number"
+						id="snipi_promo_duration"
+						name="snipi_promo_duration"
+						class="small-text"
+						value="<?php echo esc_attr( $meta['promo_duration'] ); ?>"
+						min="5"
+						max="30"
+					/>
+				</div>
+
+				<div class="snipi-field-inline">
+					<label for="snipi_promo_threshold" class="snipi-label">
+						<?php esc_html_e( 'Prag praznih vrstic', 'snipi-ekrani' ); ?>
+					</label>
+					<input
+						type="number"
+						id="snipi_promo_threshold"
+						name="snipi_promo_threshold"
+						class="small-text"
+						value="<?php echo esc_attr( $meta['promo_threshold'] ); ?>"
+						min="1"
+						max="10"
+					/>
+				</div>
+
+			</div>
 			<p class="description">
-				<?php esc_html_e( 'Ko je vključeno, se promo diapozitiv prikaže po zadnji strani urnika ali namesto urnika kadar ni dogodkov.', 'snipi-ekrani' ); ?>
+				<?php esc_html_e( 'Trajanje: koliko sekund je promo prikazan (5–30). Prag: koliko praznih vrstic mora ostati na zadnji strani (1–10).', 'snipi-ekrani' ); ?>
 			</p>
 		</div>
 
-		<!-- POSTAVITEV -->
+		<!-- ================================================================
+		     PRIMER B — CELOZASLONSKI PRIKAZ
+		     ================================================================ -->
 		<div class="snipi-field-group">
-			<label for="snipi_promo_layout" class="snipi-label">
-				<?php esc_html_e( 'Postavitev kolon', 'snipi-ekrani' ); ?>
-			</label>
-			<select id="snipi_promo_layout" name="snipi_promo_layout">
-				<?php foreach ( self::$layouts as $slug => $def ) : ?>
-					<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $current_layout, $slug ); ?>>
-						<?php echo esc_html( $def['label'] ); ?>
-					</option>
-				<?php endforeach; ?>
-			</select>
+			<h3><?php esc_html_e( 'Primer B — Celozaslonski prikaz', 'snipi-ekrani' ); ?></h3>
 			<p class="description">
-				<?php esc_html_e( 'Določi razmerje širin kolon promo diapozitiva.', 'snipi-ekrani' ); ?>
+				<?php esc_html_e( 'Ko za ta dan ni nobenega dogodka, promo v celoti nadomesti urnik. Neodvisno od Primera A.', 'snipi-ekrani' ); ?>
 			</p>
+
+			<label class="snipi-checkbox-label">
+				<input
+					type="checkbox"
+					id="snipi_promo_takeover_enabled"
+					name="snipi_promo_takeover_enabled"
+					value="1"
+					<?php checked( $meta['promo_takeover_enabled'], '1' ); ?>
+				/>
+				<span><?php esc_html_e( 'Omogoči celozaslonski prikaz', 'snipi-ekrani' ); ?></span>
+			</label>
+
+			<div style="margin-top:16px;">
+
+				<div class="snipi-field-group">
+					<label for="snipi_promo_takeover_bg_color" class="snipi-label">
+						<?php esc_html_e( 'Barva ozadja', 'snipi-ekrani' ); ?>
+					</label>
+					<input
+						type="text"
+						id="snipi_promo_takeover_bg_color"
+						name="snipi_promo_takeover_bg_color"
+						class="snipi-color-picker"
+						value="<?php echo esc_attr( $meta['promo_takeover_bg_color'] ); ?>"
+						data-default-color=""
+					/>
+					<p class="description">
+						<?php esc_html_e( 'Barva ozadja celozaslonskega promo prikaza. Prazno = barva ozadja zaslona.', 'snipi-ekrani' ); ?>
+					</p>
+				</div>
+
+				<div class="snipi-field-group">
+					<label class="snipi-checkbox-label">
+						<input
+							type="checkbox"
+							id="snipi_promo_takeover_show_logo"
+							name="snipi_promo_takeover_show_logo"
+							value="1"
+							<?php checked( $meta['promo_takeover_show_logo'], '1' ); ?>
+						/>
+						<span><?php esc_html_e( 'Prikaži logotip', 'snipi-ekrani' ); ?></span>
+					</label>
+					<p class="description">
+						<?php esc_html_e( 'Prikaže logotip ekrana nad promo kolonami (logotip je nastavljen v zavihku Nastavitve).', 'snipi-ekrani' ); ?>
+					</p>
+				</div>
+
+				<div class="snipi-field-group">
+					<label for="snipi_promo_takeover_heading" class="snipi-label">
+						<?php esc_html_e( 'Napis nad kolonami (neobvezno)', 'snipi-ekrani' ); ?>
+					</label>
+					<input
+						type="text"
+						id="snipi_promo_takeover_heading"
+						name="snipi_promo_takeover_heading"
+						class="regular-text"
+						value="<?php echo esc_attr( $meta['promo_takeover_heading'] ); ?>"
+						placeholder="<?php esc_attr_e( 'npr. Aktualno pri nas', 'snipi-ekrani' ); ?>"
+					/>
+					<p class="description">
+						<?php esc_html_e( 'Besedilo, ki se prikaže nad promo kolonami. Pusti prazno, če napisa ne želiš.', 'snipi-ekrani' ); ?>
+					</p>
+				</div>
+
+			</div>
 		</div>
 
-		<!-- IZBIRA PROMO OBJAV -->
+		<!-- ================================================================
+		     SKUPNO — POSTAVITEV IN VSEBINA KOLON
+		     ================================================================ -->
 		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Vsebina kolon', 'snipi-ekrani' ); ?></h3>
+			<h3><?php esc_html_e( 'Postavitev in vsebina kolon', 'snipi-ekrani' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'Velja za oba primera. Izberi postavitev in dodeli promo objavo vsaki koloni.', 'snipi-ekrani' ); ?>
+			</p>
+
+			<div class="snipi-field-group">
+				<label for="snipi_promo_layout" class="snipi-label">
+					<?php esc_html_e( 'Postavitev kolon', 'snipi-ekrani' ); ?>
+				</label>
+				<select id="snipi_promo_layout" name="snipi_promo_layout">
+					<?php foreach ( self::$layouts as $slug => $def ) : ?>
+						<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $current_layout, $slug ); ?>>
+							<?php echo esc_html( $def['label'] ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e( 'Določi razmerje širin kolon promo diapozitiva.', 'snipi-ekrani' ); ?>
+				</p>
+			</div>
 
 			<?php if ( empty( $promo_posts ) ) : ?>
 				<div class="notice notice-warning inline">
 					<p>
 						<?php
 						printf(
-							/* translators: %s: URL do dodajanja promo objave */
 							wp_kses(
+								/* translators: %s: URL do dodajanja promo objave */
 								__( 'Ni promo objav. <a href="%s">Dodajte prvo promo objavo</a> preden konfigurirate diapozitiv.', 'snipi-ekrani' ),
 								array( 'a' => array( 'href' => array() ) )
 							),
@@ -105,7 +222,6 @@ class SNIPI_Admin_Promo_Tab {
 				</div>
 			<?php else : ?>
 
-				<!-- PRVA KOLONA -->
 				<div class="snipi-field-group">
 					<label for="snipi_promo_col1_id" class="snipi-label">
 						<?php esc_html_e( 'Prva kolona', 'snipi-ekrani' ); ?>
@@ -120,7 +236,6 @@ class SNIPI_Admin_Promo_Tab {
 					</select>
 				</div>
 
-				<!-- DRUGA KOLONA -->
 				<div class="snipi-field-group">
 					<label for="snipi_promo_col2_id" class="snipi-label">
 						<?php esc_html_e( 'Druga kolona', 'snipi-ekrani' ); ?>
@@ -135,7 +250,6 @@ class SNIPI_Admin_Promo_Tab {
 					</select>
 				</div>
 
-				<!-- TRETJA KOLONA (skrita pri 2-kolonski postavitvi) -->
 				<div class="snipi-field-group" id="snipi-promo-col3-row">
 					<label for="snipi_promo_col3_id" class="snipi-label">
 						<?php esc_html_e( 'Tretja kolona', 'snipi-ekrani' ); ?>
@@ -156,51 +270,7 @@ class SNIPI_Admin_Promo_Tab {
 			<?php endif; ?>
 		</div>
 
-		<!-- TRAJANJE IN PRAG -->
-		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Pogoji prikaza', 'snipi-ekrani' ); ?></h3>
-
-			<div class="snipi-field-group snipi-field-group--inline">
-
-				<!-- TRAJANJE DIAPOZITIVA -->
-				<div class="snipi-field-inline">
-					<label for="snipi_promo_duration" class="snipi-label">
-						<?php esc_html_e( 'Trajanje (s)', 'snipi-ekrani' ); ?>
-					</label>
-					<input
-						type="number"
-						id="snipi_promo_duration"
-						name="snipi_promo_duration"
-						class="small-text"
-						value="<?php echo esc_attr( $meta['promo_duration'] ); ?>"
-						min="5"
-						max="30"
-					/>
-				</div>
-
-				<!-- PRAG PRAZNIH VRSTIC -->
-				<div class="snipi-field-inline">
-					<label for="snipi_promo_threshold" class="snipi-label">
-						<?php esc_html_e( 'Prag praznih vrstic', 'snipi-ekrani' ); ?>
-					</label>
-					<input
-						type="number"
-						id="snipi_promo_threshold"
-						name="snipi_promo_threshold"
-						class="small-text"
-						value="<?php echo esc_attr( $meta['promo_threshold'] ); ?>"
-						min="1"
-						max="10"
-					/>
-				</div>
-
-			</div>
-			<p class="description">
-				<?php esc_html_e( 'Trajanje: koliko sekund je promo diapozitiv prikazan (5–30). Prag: koliko praznih vrstic mora ostati na zadnji strani preden se doda promo stran (1–10).', 'snipi-ekrani' ); ?>
-			</p>
-		</div>
-
-		<!-- Inline JS za skrivanje tretje kolone pri 2-kolonski postavitvi -->
+		<!-- Inline JS: skrij tretjo kolono pri 2-kolonski postavitvi -->
 		<script>
 		( function () {
 			var layoutSelect = document.getElementById( 'snipi_promo_layout' );
