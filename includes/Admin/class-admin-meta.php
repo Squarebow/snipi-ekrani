@@ -105,13 +105,54 @@ class SNIPI_Admin_Meta {
 		$tv_confirm_dialog = isset( $_POST['snipi_tv_confirm_dialog'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_tv_confirm_dialog', $tv_confirm_dialog );
 
-		// Promo strani (v2.4.0)
+	}
 
-		// Primer A: zapolnitev praznega prostora - checkbox (1 ali 0)
+	/**
+	 * Shrani meta podatke taba Promo objave (Primer A)
+	 *
+	 * @param int $post_id ID ekrana
+	 * @return void
+	 */
+	public static function save_promo_objave_from_request( $post_id ) {
 		$promo_fill_enabled = isset( $_POST['snipi_promo_fill_enabled'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_fill_enabled', $promo_fill_enabled );
 
-		// Primer B: promo_slide rotacija — izbrane strani (array ID-jev)
+		if ( isset( $_POST['snipi_promo_duration'] ) ) {
+			$promo_duration = max( 5, min( 30, intval( $_POST['snipi_promo_duration'] ) ) );
+			update_post_meta( $post_id, '_snipi_promo_duration', $promo_duration );
+		}
+
+		if ( isset( $_POST['snipi_promo_threshold'] ) ) {
+			$promo_threshold = max( 1, min( 10, intval( $_POST['snipi_promo_threshold'] ) ) );
+			update_post_meta( $post_id, '_snipi_promo_threshold', $promo_threshold );
+		}
+
+		if ( isset( $_POST['snipi_promo_layout'] ) ) {
+			$allowed_layouts = array( 'thirds', 'quarter-half-quarter', 'halves' );
+			$promo_layout = in_array( $_POST['snipi_promo_layout'], $allowed_layouts, true )
+				? sanitize_text_field( $_POST['snipi_promo_layout'] )
+				: 'thirds';
+			update_post_meta( $post_id, '_snipi_promo_layout', $promo_layout );
+		}
+
+		if ( isset( $_POST['snipi_promo_col1_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col1_id', absint( $_POST['snipi_promo_col1_id'] ) );
+		}
+		if ( isset( $_POST['snipi_promo_col2_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col2_id', absint( $_POST['snipi_promo_col2_id'] ) );
+		}
+		if ( isset( $_POST['snipi_promo_col3_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col3_id', absint( $_POST['snipi_promo_col3_id'] ) );
+		}
+	}
+
+	/**
+	 * Shrani meta podatke taba Promo stran (Primer B)
+	 *
+	 * @param int $post_id ID ekrana
+	 * @return void
+	 */
+	public static function save_promo_diapozitiv_from_request( $post_id ) {
 		$raw_slide_ids = isset( $_POST['snipi_promo_slide_ids'] ) && is_array( $_POST['snipi_promo_slide_ids'] )
 			? $_POST['snipi_promo_slide_ids']
 			: array();
@@ -127,51 +168,16 @@ class SNIPI_Admin_Meta {
 		}
 		update_post_meta( $post_id, '_snipi_promo_slide_ids', $slide_ids );
 
-		// Primer B: trajanje posamezne strani - sekunde med 10 in 60
 		if ( isset( $_POST['snipi_promo_slide_duration'] ) ) {
 			$slide_duration = max( 10, min( 60, intval( $_POST['snipi_promo_slide_duration'] ) ) );
 			update_post_meta( $post_id, '_snipi_promo_slide_duration', $slide_duration );
 		}
 
-		// Primer B: prikaži kot dodatno stran v rotaciji - checkbox (1 ali 0)
 		$slide_show_in_rotation = isset( $_POST['snipi_promo_slide_show_in_rotation'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_slide_show_in_rotation', $slide_show_in_rotation );
 
-		// Primer B: prikaži čez cel zaslon, ko ni dogodkov - checkbox (1 ali 0)
 		$slide_show_on_empty = isset( $_POST['snipi_promo_slide_show_on_empty'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_slide_show_on_empty', $slide_show_on_empty );
-
-		// Postavitev - whitelist validacija
-		if ( isset( $_POST['snipi_promo_layout'] ) ) {
-			$allowed_layouts = array( 'thirds', 'quarter-half-quarter', 'halves' );
-			$promo_layout = in_array( $_POST['snipi_promo_layout'], $allowed_layouts, true )
-				? sanitize_text_field( $_POST['snipi_promo_layout'] )
-				: 'thirds';
-			update_post_meta( $post_id, '_snipi_promo_layout', $promo_layout );
-		}
-
-		// ID-ji promo objav za posamezne kolone
-		if ( isset( $_POST['snipi_promo_col1_id'] ) ) {
-			update_post_meta( $post_id, '_snipi_promo_col1_id', absint( $_POST['snipi_promo_col1_id'] ) );
-		}
-		if ( isset( $_POST['snipi_promo_col2_id'] ) ) {
-			update_post_meta( $post_id, '_snipi_promo_col2_id', absint( $_POST['snipi_promo_col2_id'] ) );
-		}
-		if ( isset( $_POST['snipi_promo_col3_id'] ) ) {
-			update_post_meta( $post_id, '_snipi_promo_col3_id', absint( $_POST['snipi_promo_col3_id'] ) );
-		}
-
-		// Trajanje strani - sekunde med 5 in 30
-		if ( isset( $_POST['snipi_promo_duration'] ) ) {
-			$promo_duration = max( 5, min( 30, intval( $_POST['snipi_promo_duration'] ) ) );
-			update_post_meta( $post_id, '_snipi_promo_duration', $promo_duration );
-		}
-
-		// Prag praznih vrstic - število med 1 in 10
-		if ( isset( $_POST['snipi_promo_threshold'] ) ) {
-			$promo_threshold = max( 1, min( 10, intval( $_POST['snipi_promo_threshold'] ) ) );
-			update_post_meta( $post_id, '_snipi_promo_threshold', $promo_threshold );
-		}
 	}
 
 	/**

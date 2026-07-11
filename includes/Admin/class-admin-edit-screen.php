@@ -53,9 +53,9 @@ class SNIPI_Admin_Edit_Screen {
 
 		// Določi aktivni tab (default: nastavitve)
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'nastavitve';
-		
-		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje in promo
-		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo' ), true ) ) {
+
+		$allowed_tabs = array( 'nastavitve', 'oblikovanje', 'promo_objave', 'promo_diapozitiv' );
+		if ( ! in_array( $active_tab, $allowed_tabs, true ) ) {
 			$active_tab = 'nastavitve';
 		}
 
@@ -93,8 +93,10 @@ class SNIPI_Admin_Edit_Screen {
 							SNIPI_Admin_Settings_Tab::render_content( $post_id, $meta );
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							SNIPI_Admin_Styling_Tab::render_content( $post_id, $meta );
-						} elseif ( 'promo' === $active_tab ) {
-							SNIPI_Admin_Promo_Tab::render_content( $post_id, $meta );
+						} elseif ( 'promo_objave' === $active_tab ) {
+							SNIPI_Admin_Promo_Tab::render_promo_objave_content( $post_id, $meta );
+						} elseif ( 'promo_diapozitiv' === $active_tab ) {
+							SNIPI_Admin_Promo_Tab::render_promo_slide_content( $post_id, $meta );
 						}
 						?>
 					</div>
@@ -107,8 +109,10 @@ class SNIPI_Admin_Edit_Screen {
 							self::render_settings_help();
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							self::render_styling_help();
-						} elseif ( 'promo' === $active_tab ) {
-							self::render_promo_help();
+						} elseif ( 'promo_objave' === $active_tab ) {
+							self::render_promo_objave_help();
+						} elseif ( 'promo_diapozitiv' === $active_tab ) {
+							self::render_promo_diapozitiv_help();
 						}
 						?>
 					</div>
@@ -136,9 +140,10 @@ class SNIPI_Admin_Edit_Screen {
 	protected static function render_tab_navigation( $post_id, $active_tab ) {
 		// Definicija tabov
 		$tabs = array(
-			'nastavitve'  => 'Nastavitve',
-			'oblikovanje' => 'Oblikovanje',
-			'promo'       => 'Promo stran',
+			'nastavitve'      => 'Nastavitve',
+			'oblikovanje'     => 'Oblikovanje',
+			'promo_objave'    => 'Promo objave',
+			'promo_diapozitiv' => 'Promo stran',
 		);
 
 		echo '<h2 class="nav-tab-wrapper">';
@@ -284,17 +289,27 @@ class SNIPI_Admin_Edit_Screen {
 			wp_die( esc_html__( 'Neveljaven varnostni žeton.', 'snipi-ekrani' ) );
 		}
 
+		// Pridobi aktivni tab (potreben za shranjevanje in redirect)
+		$active_tab = isset( $_POST['active_tab'] ) ? sanitize_key( $_POST['active_tab'] ) : 'nastavitve';
+		$allowed_tabs = array( 'nastavitve', 'oblikovanje', 'promo_objave', 'promo_diapozitiv' );
+		if ( ! in_array( $active_tab, $allowed_tabs, true ) ) {
+			$active_tab = 'nastavitve';
+		}
+
 		// Shrani naslov ekrana (če je poslan)
 		if ( isset( $_POST['snipi_post_title'] ) ) {
 			$title = sanitize_text_field( wp_unslash( $_POST['snipi_post_title'] ) );
 			SNIPI_Admin_Meta::update_screen_title( $post_id, $title );
 		}
 
-		// Shrani vse meta podatke
-		SNIPI_Admin_Meta::save_from_request( $post_id );
-
-		// Pridobi aktivni tab za redirect
-		$active_tab = isset( $_POST['active_tab'] ) ? sanitize_key( $_POST['active_tab'] ) : 'nastavitve';
+		// Shrani meta podatke glede na aktivni tab
+		if ( 'promo_objave' === $active_tab ) {
+			SNIPI_Admin_Meta::save_promo_objave_from_request( $post_id );
+		} elseif ( 'promo_diapozitiv' === $active_tab ) {
+			SNIPI_Admin_Meta::save_promo_diapozitiv_from_request( $post_id );
+		} else {
+			SNIPI_Admin_Meta::save_from_request( $post_id );
+		}
 
 		// Redirect nazaj na edit screen z success sporočilom
 		$redirect_url = add_query_arg(
@@ -313,34 +328,54 @@ class SNIPI_Admin_Edit_Screen {
 	}
 
 	/**
-	 * Renderaj help box za tab Promo stran
+	 * Renderaj help box za tab Promo objave
 	 *
 	 * @return void
 	 */
-	protected static function render_promo_help() {
+	protected static function render_promo_objave_help() {
 		?>
 		<div class="snipi-help-box">
-			<h3><i class="fas fa-images"></i> Navodila za promo vsebino</h3>
+			<h3><i class="fas fa-layer-group"></i> Navodila za Promo objave</h3>
 
-			<h4><i class="fas fa-toggle-on"></i> Primer A in B sta neodvisna</h4>
-			<p>Primer A in Primer B sta <strong>popolnoma neodvisna</strong>. Vsak ima svoje stikalo. Vklop enega ne vklopi drugega — aktivna sta lahko oba hkrati, samo eden, ali nobeden.</p>
-
-			<h4><i class="fas fa-layer-group"></i> Primer A — Zapolnitev (Promo Objava)</h4>
+			<h4><i class="fas fa-toggle-on"></i> Zapolnitev praznega prostora</h4>
 			<p>Kolone s <strong>Promo Objavami</strong> se dodajo kot dodatna stran v rotacijo urnika, kadar na zadnji strani ostane vsaj toliko praznih vrstic, kot določa prag.</p>
+
+			<h4><i class="fas fa-sliders-h"></i> Nastavitve</h4>
 			<ul>
 				<li><strong>Trajanje:</strong> Koliko sekund je stran prikazana (5–30 s).</li>
 				<li><strong>Prag:</strong> Koliko praznih vrstic mora ostati (1–10). Nižja vrednost = pogostejši prikaz.</li>
 				<li><strong>Postavitev:</strong> Razmerje širin kolon (1/3, 1/4+1/2+1/4, ali 1/2).</li>
 			</ul>
 
-			<h4><i class="fas fa-film"></i> Primer B — Promo Strani</h4>
+			<h4><i class="fas fa-edit"></i> Vsebina kolon</h4>
+			<p>Promo Objave upravljaš v meniju <strong>Promo objave</strong>. Vsaka objava je ena kolona vsebine — določiš sliko, naslov in besedilo.</p>
+			<p>Pri postavitvi <em>1/2 + 1/2</em> tretja kolona ni na voljo.</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Renderaj help box za tab Promo stran
+	 *
+	 * @return void
+	 */
+	protected static function render_promo_diapozitiv_help() {
+		?>
+		<div class="snipi-help-box">
+			<h3><i class="fas fa-film"></i> Navodila za Promo strani</h3>
+
+			<h4><i class="fas fa-paint-brush"></i> Oblikovanje</h4>
 			<p>Celozaslonske <strong>Promo Strani</strong> so oblikovane s polnim Gutenberg urejevalnikom. Upravljaš jih v meniju <strong>Promo strani</strong>.</p>
-			<p>Primer B ima <strong>dva neodvisna sprožilca</strong> — oba sta privzeto izklopljena:</p>
+
+			<h4><i class="fas fa-toggle-on"></i> Dva neodvisna sprožilca</h4>
+			<p>Oba sta privzeto izklopljena in sta neodvisna — aktivna sta lahko oba hkrati:</p>
 			<ul>
 				<li><strong>Po urniku:</strong> Strani se dodajo v rotacijo za zadnjo stranjo urnika. Urnik ostane viden.</li>
 				<li><strong>Ko ni dogodkov:</strong> Ko za ta dan ni nobenega dogodka, strani v celoti nadomestijo urnik. Privzeto <strong>izklopljeno</strong> — večja vizualna sprememba, vklopi šele ko je vsebina pripravljena.</li>
 			</ul>
-			<p>Oba sprožilca sta neodvisna — aktivna sta lahko oba hkrati.</p>
+
+			<h4><i class="fas fa-sort-numeric-down"></i> Vrstni red</h4>
+			<p>Izbrane strani se prikazujejo v abecednem vrstnem redu glede na naslov.</p>
 		</div>
 		<?php
 	}
