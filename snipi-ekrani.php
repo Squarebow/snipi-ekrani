@@ -79,6 +79,7 @@ require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-admin-edit-screen.php';
 require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-admin-settings-tab.php';
 require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-admin-styling-tab.php';
 require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-promo-cpt.php';
+require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-promo-slide-cpt.php';
 require_once SNIPI_EKRANI_PATH . 'includes/Admin/class-admin-promo-tab.php';
 
 // API moduli
