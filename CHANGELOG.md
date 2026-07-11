@@ -2,6 +2,24 @@
 
 ---
 
+## [2.4.1] – 2026-07-11
+
+### Admin – Promo tab razdeljen na dva samostojna taba
+
+- ✅ **Nov tab "Promo objave"**: vsebuje nastavitve Primera A (zapolnitev praznih vrstic s Promo Objavami) — stikalo, trajanje, prag, postavitev kolon, izbira objav za vsako kolono
+- ✅ **Nov tab "Promo stran"**: vsebuje nastavitve Primera B (celozaslonske Promo Strani) — izbira strani, trajanje, sprožilca (po urniku / ko ni dogodkov)
+- ✅ **Ključi tabov**: `promo_objave` in `promo_diapozitiv` (izognitev koliziji s CPT slugom `promo_slide`, ki je povzročala preusmeritev v prejšnjem poskusu razdelitve)
+- ✅ **Tab-specifično shranjevanje**: vsak tab shrani samo lastna polja — odpravljeno predhodno obstoječe prepisovanje checkbox vrednosti med tabi (`save_promo_objave_from_request()`, `save_promo_diapozitiv_from_request()`)
+- ✅ **Stranska navodila** razdeljena — vsak tab ima svojo kontekstualno pomoč
+
+### Preimenovanje CPT "Promo diapozitivi" → "Promo strani"
+
+- ✅ Posodobljene vse oznake CPT `promo_slide`: singular "Promo stran", plural "Promo strani" (slovnično: `nova/novo/prvo` za ženski spol)
+- ✅ Posodobljene vse uporabniško vidne nize v `class-admin-promo-tab.php` in `class-admin-edit-screen.php`
+- ✅ CPT slug `promo_slide` in meta ključi ostajajo nespremenjeni — obstoječi podatki niso prizadeti
+
+---
+
 ## v2.3.5 (19. marec 2026)
 
 ### Razširitev prikaza na 30 prihodnjih dni
