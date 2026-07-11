@@ -29,6 +29,18 @@ class SNIPI_Admin_Promo_Tab {
 	);
 
 	/**
+	 * Renderaj vsebino taba Promo diapozitiv (oba primera skupaj)
+	 *
+	 * @param int   $post_id ID ekrana
+	 * @param array $meta    Asociativni array z meta podatki
+	 * @return void
+	 */
+	public static function render_content( $post_id, $meta ) {
+		self::render_promo_objave_content( $post_id, $meta );
+		self::render_promo_slide_content( $post_id, $meta );
+	}
+
+	/**
 	 * Renderaj vsebino taba Promo objave (Primer A — Zapolnitev)
 	 *
 	 * @param int   $post_id ID ekrana
