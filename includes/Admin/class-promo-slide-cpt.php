@@ -1,6 +1,6 @@
 <?php
 /**
- * Promo Diapozitiv CPT
+ * Promo Stran CPT
  *
  * Registracija Custom Post Type 'promo_slide'.
  * Celozaslonska vsebina za rotacijo na TV ekranih — oblikovana s
@@ -34,19 +34,19 @@ class Promo_Slide_CPT {
 	 */
 	public static function register_cpt() {
 		$labels = array(
-			'name'               => 'Promo diapozitivi',
-			'singular_name'      => 'Promo diapozitiv',
-			'menu_name'          => 'Promo diapozitivi',
-			'name_admin_bar'     => 'Promo diapozitiv',
-			'add_new'            => 'Nov promo diapozitiv',
-			'add_new_item'       => 'Dodaj nov promo diapozitiv',
-			'edit_item'          => 'Uredi promo diapozitiv',
-			'new_item'           => 'Nov promo diapozitiv',
-			'view_item'          => 'Poglej promo diapozitiv',
-			'search_items'       => 'Išči promo diapozitive',
-			'not_found'          => 'Ni najdenih promo diapozitivov',
-			'not_found_in_trash' => 'Ni promo diapozitivov v smeteh',
-			'all_items'          => 'Promo diapozitivi',
+			'name'               => 'Promo strani',
+			'singular_name'      => 'Promo stran',
+			'menu_name'          => 'Promo strani',
+			'name_admin_bar'     => 'Promo stran',
+			'add_new'            => 'Nova promo stran',
+			'add_new_item'       => 'Dodaj novo promo stran',
+			'edit_item'          => 'Uredi promo stran',
+			'new_item'           => 'Nova promo stran',
+			'view_item'          => 'Poglej promo stran',
+			'search_items'       => 'Išči promo strani',
+			'not_found'          => 'Ni najdenih promo strani',
+			'not_found_in_trash' => 'Ni promo strani v smeteh',
+			'all_items'          => 'Promo strani',
 		);
 
 		$args = array(

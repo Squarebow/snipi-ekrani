@@ -138,7 +138,7 @@ class SNIPI_Admin_Edit_Screen {
 		$tabs = array(
 			'nastavitve'  => 'Nastavitve',
 			'oblikovanje' => 'Oblikovanje',
-			'promo'       => 'Promo diapozitiv',
+			'promo'       => 'Promo stran',
 		);
 
 		echo '<h2 class="nav-tab-wrapper">';
@@ -313,7 +313,7 @@ class SNIPI_Admin_Edit_Screen {
 	}
 
 	/**
-	 * Renderaj help box za tab Promo diapozitiv
+	 * Renderaj help box za tab Promo stran
 	 *
 	 * @return void
 	 */
@@ -333,12 +333,12 @@ class SNIPI_Admin_Edit_Screen {
 				<li><strong>Postavitev:</strong> Razmerje širin kolon (1/3, 1/4+1/2+1/4, ali 1/2).</li>
 			</ul>
 
-			<h4><i class="fas fa-film"></i> Primer B — Promo Diapozitivi</h4>
-			<p>Celozaslonski <strong>Promo Diapozitivi</strong> so oblikovani s polnim Gutenberg urejevalnikom. Upravljaš jih v meniju <strong>Promo diapozitivi</strong>.</p>
+			<h4><i class="fas fa-film"></i> Primer B — Promo Strani</h4>
+			<p>Celozaslonske <strong>Promo Strani</strong> so oblikovane s polnim Gutenberg urejevalnikom. Upravljaš jih v meniju <strong>Promo strani</strong>.</p>
 			<p>Primer B ima <strong>dva neodvisna sprožilca</strong> — oba sta privzeto izklopljena:</p>
 			<ul>
-				<li><strong>Po urniku:</strong> Diapozitivi se dodajo v rotacijo za zadnjo stranjo urnika. Urnik ostane viden.</li>
-				<li><strong>Ko ni dogodkov:</strong> Ko za ta dan ni nobenega dogodka, diapozitivi v celoti nadomestijo urnik. Privzeto <strong>izklopljeno</strong> — večja vizualna sprememba, vklopi šele ko je vsebina pripravljena.</li>
+				<li><strong>Po urniku:</strong> Strani se dodajo v rotacijo za zadnjo stranjo urnika. Urnik ostane viden.</li>
+				<li><strong>Ko ni dogodkov:</strong> Ko za ta dan ni nobenega dogodka, strani v celoti nadomestijo urnik. Privzeto <strong>izklopljeno</strong> — večja vizualna sprememba, vklopi šele ko je vsebina pripravljena.</li>
 			</ul>
 			<p>Oba sprožilca sta neodvisna — aktivna sta lahko oba hkrati.</p>
 		</div>

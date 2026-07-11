@@ -105,13 +105,13 @@ class SNIPI_Admin_Meta {
 		$tv_confirm_dialog = isset( $_POST['snipi_tv_confirm_dialog'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_tv_confirm_dialog', $tv_confirm_dialog );
 
-		// Promo diapozitiv (v2.4.0)
+		// Promo strani (v2.4.0)
 
 		// Primer A: zapolnitev praznega prostora - checkbox (1 ali 0)
 		$promo_fill_enabled = isset( $_POST['snipi_promo_fill_enabled'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_fill_enabled', $promo_fill_enabled );
 
-		// Primer B: promo_slide rotacija — izbrani diapozitivi (array ID-jev)
+		// Primer B: promo_slide rotacija — izbrane strani (array ID-jev)
 		$raw_slide_ids = isset( $_POST['snipi_promo_slide_ids'] ) && is_array( $_POST['snipi_promo_slide_ids'] )
 			? $_POST['snipi_promo_slide_ids']
 			: array();
@@ -127,13 +127,13 @@ class SNIPI_Admin_Meta {
 		}
 		update_post_meta( $post_id, '_snipi_promo_slide_ids', $slide_ids );
 
-		// Primer B: trajanje posameznega diapozitiva - sekunde med 10 in 60
+		// Primer B: trajanje posamezne strani - sekunde med 10 in 60
 		if ( isset( $_POST['snipi_promo_slide_duration'] ) ) {
 			$slide_duration = max( 10, min( 60, intval( $_POST['snipi_promo_slide_duration'] ) ) );
 			update_post_meta( $post_id, '_snipi_promo_slide_duration', $slide_duration );
 		}
 
-		// Primer B: prikaži kot dodaten diapozitiv v rotaciji - checkbox (1 ali 0)
+		// Primer B: prikaži kot dodatno stran v rotaciji - checkbox (1 ali 0)
 		$slide_show_in_rotation = isset( $_POST['snipi_promo_slide_show_in_rotation'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_slide_show_in_rotation', $slide_show_in_rotation );
 
@@ -161,7 +161,7 @@ class SNIPI_Admin_Meta {
 			update_post_meta( $post_id, '_snipi_promo_col3_id', absint( $_POST['snipi_promo_col3_id'] ) );
 		}
 
-		// Trajanje diapozitiva - sekunde med 5 in 30
+		// Trajanje strani - sekunde med 5 in 30
 		if ( isset( $_POST['snipi_promo_duration'] ) ) {
 			$promo_duration = max( 5, min( 30, intval( $_POST['snipi_promo_duration'] ) ) );
 			update_post_meta( $post_id, '_snipi_promo_duration', $promo_duration );
@@ -202,7 +202,7 @@ class SNIPI_Admin_Meta {
 		$tv_mode_override    = get_post_meta( $post_id, '_snipi_tv_mode_override', true );
 		$tv_confirm_dialog   = get_post_meta( $post_id, '_snipi_tv_confirm_dialog', true );
 
-		// Promo diapozitiv (v2.4.0)
+		// Promo strani (v2.4.0)
 		$promo_fill_enabled          = get_post_meta( $post_id, '_snipi_promo_fill_enabled', true );
 		$promo_slide_ids             = get_post_meta( $post_id, '_snipi_promo_slide_ids', true );
 		$promo_slide_duration        = get_post_meta( $post_id, '_snipi_promo_slide_duration', true );
@@ -260,7 +260,7 @@ class SNIPI_Admin_Meta {
 			'enable_tv_detection' => $enable_tv_detection,
 			'tv_mode_override'    => $tv_mode_override,
 			'tv_confirm_dialog'   => $tv_confirm_dialog,
-			// Promo diapozitiv (v2.4.0)
+			// Promo strani (v2.4.0)
 			'promo_fill_enabled'            => $promo_fill_enabled,
 			'promo_slide_ids'               => $promo_slide_ids,
 			'promo_slide_duration'          => intval( $promo_slide_duration ),

@@ -3,7 +3,7 @@
  * Promo Objava CPT
  *
  * Registracija Custom Post Type 'promo_objava'.
- * Samostojen tip vsebine za promocijske diapozitive (slike, naslovi, besedilo),
+ * Samostojen tip vsebine za promocijske objave (slike, naslovi, besedilo),
  * ki ga ekrani povlečejo iz skupne knjižnice — ni vezan na posamezen ekran.
  *
  * Funkcionalnosti:

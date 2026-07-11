@@ -5,7 +5,7 @@
  * Vsebina promo tabov v edit screenu ekrana.
  * Dva neodvisna primera, vsak v svojem tabu:
  *  A. render_promo_objave_content() — zapolnitev praznih vrstic s Promo Objavami
- *  B. render_promo_slide_content()  — celozaslonski Promo Diapozitivi
+ *  B. render_promo_slide_content()  — celozaslonske Promo Strani
  *
  * @package SNIPI_Ekrani
  * @since   2.4.0
@@ -29,7 +29,7 @@ class SNIPI_Admin_Promo_Tab {
 	);
 
 	/**
-	 * Renderaj vsebino taba Promo diapozitiv (oba primera skupaj)
+	 * Renderaj vsebino taba Promo stran (oba primera skupaj)
 	 *
 	 * @param int   $post_id ID ekrana
 	 * @param array $meta    Asociativni array z meta podatki
@@ -216,7 +216,7 @@ class SNIPI_Admin_Promo_Tab {
 	}
 
 	/**
-	 * Renderaj vsebino taba Promo diapozitiv (Primer B — Promo Diapozitivi)
+	 * Renderaj vsebino taba Promo stran (Primer B — Promo Strani)
 	 *
 	 * @param int   $post_id ID ekrana
 	 * @param array $meta    Asociativni array z meta podatki
@@ -234,14 +234,14 @@ class SNIPI_Admin_Promo_Tab {
 		?>
 
 		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Promo Diapozitivi', 'snipi-ekrani' ); ?></h3>
+			<h3><?php esc_html_e( 'Promo Strani', 'snipi-ekrani' ); ?></h3>
 			<p class="description">
-				<?php esc_html_e( 'Celozaslonski diapozitivi iz knjižnice Promo Diapozitivi. Neodvisno od Promo Objav.', 'snipi-ekrani' ); ?>
+				<?php esc_html_e( 'Celozaslonske strani iz knjižnice Promo Strani. Neodvisno od Promo Objav.', 'snipi-ekrani' ); ?>
 			</p>
 
-			<!-- Izbira diapozitivov -->
+			<!-- Izbira strani -->
 			<div class="snipi-field-group">
-				<label class="snipi-label"><?php esc_html_e( 'Izberi diapozitive', 'snipi-ekrani' ); ?></label>
+				<label class="snipi-label"><?php esc_html_e( 'Izberi strani', 'snipi-ekrani' ); ?></label>
 
 				<?php if ( empty( $slide_posts ) ) : ?>
 					<div class="notice notice-warning inline">
@@ -249,8 +249,8 @@ class SNIPI_Admin_Promo_Tab {
 							<?php
 							printf(
 								wp_kses(
-									/* translators: %s: URL do dodajanja promo diapozitiva */
-									__( 'Ni promo diapozitivov. <a href="%s">Dodajte prvi promo diapozitiv</a> preden konfigurirate ta tab.', 'snipi-ekrani' ),
+									/* translators: %s: URL do dodajanja promo strani */
+									__( 'Ni promo strani. <a href="%s">Dodajte prvo promo stran</a> preden konfigurirate ta tab.', 'snipi-ekrani' ),
 									array( 'a' => array( 'href' => array() ) )
 								),
 								esc_url( admin_url( 'post-new.php?post_type=promo_slide' ) )
@@ -273,15 +273,15 @@ class SNIPI_Admin_Promo_Tab {
 						<?php endforeach; ?>
 					</div>
 					<p class="description">
-						<?php esc_html_e( 'Izberi 1–3 diapozitive za prikaz na tem ekranu. Prikazani bodo v vrstnem redu, ki si ga določiš z naslovi.', 'snipi-ekrani' ); ?>
+						<?php esc_html_e( 'Izberi 1–3 strani za prikaz na tem ekranu. Prikazane bodo v vrstnem redu, ki si ga določiš z naslovi.', 'snipi-ekrani' ); ?>
 					</p>
 				<?php endif; ?>
 			</div>
 
-			<!-- Trajanje posameznega diapozitiva -->
+			<!-- Trajanje posamezne strani -->
 			<div class="snipi-field-group">
 				<label for="snipi_promo_slide_duration" class="snipi-label">
-					<?php esc_html_e( 'Trajanje diapozitiva (s)', 'snipi-ekrani' ); ?>
+					<?php esc_html_e( 'Trajanje strani (s)', 'snipi-ekrani' ); ?>
 				</label>
 				<input
 					type="number"
@@ -293,7 +293,7 @@ class SNIPI_Admin_Promo_Tab {
 					max="60"
 				/>
 				<p class="description">
-					<?php esc_html_e( 'Koliko sekund je vsak diapozitiv prikazan (10–60).', 'snipi-ekrani' ); ?>
+					<?php esc_html_e( 'Koliko sekund je vsaka stran prikazana (10–60).', 'snipi-ekrani' ); ?>
 				</p>
 			</div>
 
@@ -307,10 +307,10 @@ class SNIPI_Admin_Promo_Tab {
 						value="1"
 						<?php checked( $meta['promo_slide_show_in_rotation'], '1' ); ?>
 					/>
-					<span><?php esc_html_e( 'Prikaži kot dodaten diapozitiv po urniku', 'snipi-ekrani' ); ?></span>
+					<span><?php esc_html_e( 'Prikaži kot dodatno stran po urniku', 'snipi-ekrani' ); ?></span>
 				</label>
 				<p class="description">
-					<?php esc_html_e( 'Diapozitivi se dodajo v rotacijo za zadnjo stranjo urnika.', 'snipi-ekrani' ); ?>
+					<?php esc_html_e( 'Strani se dodajo v rotacijo za zadnjo stranjo urnika.', 'snipi-ekrani' ); ?>
 				</p>
 			</div>
 
@@ -327,7 +327,7 @@ class SNIPI_Admin_Promo_Tab {
 					<span><?php esc_html_e( 'Prikaži čez cel zaslon, ko ni dogodkov', 'snipi-ekrani' ); ?></span>
 				</label>
 				<p class="description">
-					<?php esc_html_e( 'Ko za ta dan ni nobenega dogodka, diapozitivi v celoti nadomestijo urnik. Privzeto izklopljeno — vklopi samo ko je vsebina pripravljena.', 'snipi-ekrani' ); ?>
+					<?php esc_html_e( 'Ko za ta dan ni nobenega dogodka, strani v celoti nadomestijo urnik. Privzeto izklopljeno — vklopi samo ko je vsebina pripravljena.', 'snipi-ekrani' ); ?>
 				</p>
 			</div>
 		</div>
