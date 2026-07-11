@@ -54,8 +54,8 @@ class SNIPI_Admin_Edit_Screen {
 		// Določi aktivni tab (default: nastavitve)
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'nastavitve';
 		
-		// Validiraj tab - dovoljeni samo nastavitve in oblikovanje
-		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje' ), true ) ) {
+		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje in promo_slide
+		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo_slide' ), true ) ) {
 			$active_tab = 'nastavitve';
 		}
 
@@ -93,6 +93,8 @@ class SNIPI_Admin_Edit_Screen {
 							SNIPI_Admin_Settings_Tab::render_content( $post_id, $meta );
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							SNIPI_Admin_Styling_Tab::render_content( $post_id, $meta );
+						} elseif ( 'promo_slide' === $active_tab ) {
+							SNIPI_Admin_Promo_Tab::render_content( $post_id, $meta );
 						}
 						?>
 					</div>
@@ -105,6 +107,8 @@ class SNIPI_Admin_Edit_Screen {
 							self::render_settings_help();
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							self::render_styling_help();
+						} elseif ( 'promo_slide' === $active_tab ) {
+							self::render_promo_help();
 						}
 						?>
 					</div>
@@ -134,6 +138,7 @@ class SNIPI_Admin_Edit_Screen {
 		$tabs = array(
 			'nastavitve'  => 'Nastavitve',
 			'oblikovanje' => 'Oblikovanje',
+			'promo_slide' => 'Promo diapozitiv',
 		);
 
 		echo '<h2 class="nav-tab-wrapper">';
@@ -308,8 +313,45 @@ class SNIPI_Admin_Edit_Screen {
 	}
 
 	/**
+	 * Renderaj help box za tab Promo diapozitiv
+	 *
+	 * @return void
+	 */
+	protected static function render_promo_help() {
+		?>
+		<div class="snipi-help-box">
+			<h3><i class="fas fa-images"></i> Navodila za promo diapozitiv</h3>
+
+			<h4><i class="fas fa-toggle-on"></i> Kdaj se prikaže</h4>
+			<p>Promo diapozitiv se prikaže v dveh primerih:</p>
+			<ul>
+				<li><strong>Primer A:</strong> Ko na zadnji strani urnika ostane dovolj praznih vrstic (prag), se promo doda kot dodatna stran v rotaciji.</li>
+				<li><strong>Primer B:</strong> Ko za ta dan ni nobenega dogodka, promo nadomesti celoten urnik.</li>
+			</ul>
+
+			<h4><i class="fas fa-th-large"></i> Postavitev kolon</h4>
+			<p>Izberite razmerje širin za prikaz treh (ali dveh) promo objav vzporedno:</p>
+			<ul>
+				<li><strong>1/3 + 1/3 + 1/3</strong> – enake tri kolone</li>
+				<li><strong>1/4 + 1/2 + 1/4</strong> – sredinska kolona je širša</li>
+				<li><strong>1/2 + 1/2</strong> – dve enaki koloni</li>
+			</ul>
+
+			<h4><i class="fas fa-photo-video"></i> Promo objave</h4>
+			<p>Promo objave upravljate v meniju <strong>Promo objave</strong>. Vsaka objava ima naslov, besedilo (do 200 znakov) in sliko. Iste promo objave so lahko dodeljene večim ekranom.</p>
+
+			<h4><i class="fas fa-clock"></i> Trajanje in prag</h4>
+			<ul>
+				<li><strong>Trajanje:</strong> Koliko sekund je promo diapozitiv prikazan v rotaciji (Primer A).</li>
+				<li><strong>Prag praznih vrstic:</strong> Minimalno število praznih vrstic na zadnji strani urnika, da se promo diapozitiv doda (Primer A). Nižja vrednost = promo se prikaže bolj pogosto.</li>
+			</ul>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Renderaj error sporočilo če post ne obstaja
-	 * 
+	 *
 	 * @return void
 	 */
 	protected static function render_error_message() {

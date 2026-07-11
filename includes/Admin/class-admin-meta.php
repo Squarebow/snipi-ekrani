@@ -104,6 +104,44 @@ class SNIPI_Admin_Meta {
 		// TV potrditveno okno - checkbox (1 ali 0)
 		$tv_confirm_dialog = isset( $_POST['snipi_tv_confirm_dialog'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_tv_confirm_dialog', $tv_confirm_dialog );
+
+		// Promo diapozitiv (v2.4.0)
+
+		// Omogočen - checkbox (1 ali 0)
+		$promo_enabled = isset( $_POST['snipi_promo_enabled'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_enabled', $promo_enabled );
+
+		// Postavitev - whitelist validacija
+		if ( isset( $_POST['snipi_promo_layout'] ) ) {
+			$allowed_layouts = array( 'thirds', 'quarter-half-quarter', 'halves' );
+			$promo_layout = in_array( $_POST['snipi_promo_layout'], $allowed_layouts, true )
+				? sanitize_text_field( $_POST['snipi_promo_layout'] )
+				: 'thirds';
+			update_post_meta( $post_id, '_snipi_promo_layout', $promo_layout );
+		}
+
+		// ID-ji promo objav za posamezne kolone
+		if ( isset( $_POST['snipi_promo_col1_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col1_id', absint( $_POST['snipi_promo_col1_id'] ) );
+		}
+		if ( isset( $_POST['snipi_promo_col2_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col2_id', absint( $_POST['snipi_promo_col2_id'] ) );
+		}
+		if ( isset( $_POST['snipi_promo_col3_id'] ) ) {
+			update_post_meta( $post_id, '_snipi_promo_col3_id', absint( $_POST['snipi_promo_col3_id'] ) );
+		}
+
+		// Trajanje diapozitiva - sekunde med 5 in 30
+		if ( isset( $_POST['snipi_promo_duration'] ) ) {
+			$promo_duration = max( 5, min( 30, intval( $_POST['snipi_promo_duration'] ) ) );
+			update_post_meta( $post_id, '_snipi_promo_duration', $promo_duration );
+		}
+
+		// Prag praznih vrstic - število med 1 in 10
+		if ( isset( $_POST['snipi_promo_threshold'] ) ) {
+			$promo_threshold = max( 1, min( 10, intval( $_POST['snipi_promo_threshold'] ) ) );
+			update_post_meta( $post_id, '_snipi_promo_threshold', $promo_threshold );
+		}
 	}
 
 	/**
@@ -134,6 +172,15 @@ class SNIPI_Admin_Meta {
 		$tv_mode_override    = get_post_meta( $post_id, '_snipi_tv_mode_override', true );
 		$tv_confirm_dialog   = get_post_meta( $post_id, '_snipi_tv_confirm_dialog', true );
 
+		// Promo diapozitiv (v2.4.0)
+		$promo_enabled   = get_post_meta( $post_id, '_snipi_promo_enabled', true );
+		$promo_layout    = get_post_meta( $post_id, '_snipi_promo_layout', true );
+		$promo_col1_id   = get_post_meta( $post_id, '_snipi_promo_col1_id', true );
+		$promo_col2_id   = get_post_meta( $post_id, '_snipi_promo_col2_id', true );
+		$promo_col3_id   = get_post_meta( $post_id, '_snipi_promo_col3_id', true );
+		$promo_duration  = get_post_meta( $post_id, '_snipi_promo_duration', true );
+		$promo_threshold = get_post_meta( $post_id, '_snipi_promo_threshold', true );
+
 		// Nastavi default vrednosti če meta ne obstaja
 		$rows_per_page     = $rows_per_page ?: 8;
 		$autoplay_interval = $autoplay_interval ?: 10;
@@ -145,6 +192,11 @@ class SNIPI_Admin_Meta {
 		$enable_tv_detection = $enable_tv_detection !== '' ? $enable_tv_detection : '1';
 		$tv_mode_override    = $tv_mode_override ?: 'auto';
 		$tv_confirm_dialog   = $tv_confirm_dialog !== '' ? $tv_confirm_dialog : '1';
+
+		// Promo defaults
+		$promo_layout    = $promo_layout ?: 'thirds';
+		$promo_duration  = max( 5, min( 30, intval( $promo_duration ?: 15 ) ) );
+		$promo_threshold = max( 1, min( 10, intval( $promo_threshold ?: 3 ) ) );
 
 		// Izračunaj število dogodkov za danes (če je API ključ nastavljen)
 		$today_events_count = null;
@@ -170,6 +222,14 @@ class SNIPI_Admin_Meta {
 			'enable_tv_detection' => $enable_tv_detection,
 			'tv_mode_override'    => $tv_mode_override,
 			'tv_confirm_dialog'   => $tv_confirm_dialog,
+			// Promo diapozitiv (v2.4.0)
+			'promo_enabled'       => $promo_enabled,
+			'promo_layout'        => $promo_layout,
+			'promo_col1_id'       => intval( $promo_col1_id ),
+			'promo_col2_id'       => intval( $promo_col2_id ),
+			'promo_col3_id'       => intval( $promo_col3_id ),
+			'promo_duration'      => intval( $promo_duration ),
+			'promo_threshold'     => intval( $promo_threshold ),
 		);
 	}
 
