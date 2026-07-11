@@ -2,10 +2,10 @@
 /**
  * SNIPI Admin Promo Tab
  *
- * Vsebina taba "Promo diapozitiv" v edit screenu ekrana.
- * Dva neodvisna primera:
- *  A. Zapolnitev — promo objava zapolni prazne vrstice na zadnji strani urnika
- *  B. Promo diapozitivi — promo_slide rotacija kot dodaten diapozitiv ali celozaslonski prikaz
+ * Vsebina promo tabov v edit screenu ekrana.
+ * Dva neodvisna primera, vsak v svojem tabu:
+ *  A. render_promo_objave_content() — zapolnitev praznih vrstic s Promo Objavami
+ *  B. render_promo_slide_content()  — celozaslonski Promo Diapozitivi
  *
  * @package SNIPI_Ekrani
  * @since   2.4.0
@@ -29,38 +29,25 @@ class SNIPI_Admin_Promo_Tab {
 	);
 
 	/**
-	 * Renderaj vsebino taba Promo diapozitiv
+	 * Renderaj vsebino taba Promo objave (Primer A — Zapolnitev)
 	 *
 	 * @param int   $post_id ID ekrana
 	 * @param array $meta    Asociativni array z meta podatki
 	 * @return void
 	 */
-	public static function render_content( $post_id, $meta ) {
-		$promo_posts = get_posts( array(
+	public static function render_promo_objave_content( $post_id, $meta ) {
+		$promo_posts    = get_posts( array(
 			'post_type'      => 'promo_objava',
 			'post_status'    => 'publish',
 			'posts_per_page' => -1,
 			'orderby'        => 'title',
 			'order'          => 'ASC',
 		) );
-
-		$slide_posts = get_posts( array(
-			'post_type'      => 'promo_slide',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
-		) );
-
-		$current_layout   = $meta['promo_layout'] ?? 'thirds';
-		$selected_slide_ids = is_array( $meta['promo_slide_ids'] ) ? $meta['promo_slide_ids'] : array();
+		$current_layout = $meta['promo_layout'] ?? 'thirds';
 		?>
 
-		<!-- ================================================================
-		     PRIMER A — ZAPOLNITEV (PROMO OBJAVA)
-		     ================================================================ -->
 		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Primer A — Zapolnitev (Promo Objava)', 'snipi-ekrani' ); ?></h3>
+			<h3><?php esc_html_e( 'Zapolnitev (Promo Objava)', 'snipi-ekrani' ); ?></h3>
 			<p class="description">
 				<?php esc_html_e( 'Promo vsebina iz kolon (Promo Objava) se doda kot dodatna stran v rotacijo urnika, kadar na zadnji strani ostane dovolj praznih vrstic.', 'snipi-ekrani' ); ?>
 			</p>
@@ -137,7 +124,7 @@ class SNIPI_Admin_Promo_Tab {
 						printf(
 							wp_kses(
 								/* translators: %s: URL do dodajanja promo objave */
-								__( 'Ni promo objav. <a href="%s">Dodajte prvo promo objavo</a> preden konfigurirate Primer A.', 'snipi-ekrani' ),
+								__( 'Ni promo objav. <a href="%s">Dodajte prvo promo objavo</a> preden konfigurirate ta tab.', 'snipi-ekrani' ),
 								array( 'a' => array( 'href' => array() ) )
 							),
 							esc_url( admin_url( 'post-new.php?post_type=promo_objava' ) )
@@ -195,13 +182,49 @@ class SNIPI_Admin_Promo_Tab {
 			<?php endif; ?>
 		</div>
 
-		<!-- ================================================================
-		     PRIMER B — PROMO DIAPOZITIVI
-		     ================================================================ -->
+		<!-- Inline JS: skrij tretjo kolono pri 2-kolonski postavitvi -->
+		<script>
+		( function () {
+			var layoutSelect = document.getElementById( 'snipi_promo_layout' );
+			var col3Row      = document.getElementById( 'snipi-promo-col3-row' );
+
+			if ( ! layoutSelect || ! col3Row ) {
+				return;
+			}
+
+			function toggleCol3() {
+				col3Row.style.display = ( layoutSelect.value === 'halves' ) ? 'none' : '';
+			}
+
+			layoutSelect.addEventListener( 'change', toggleCol3 );
+			toggleCol3();
+		}() );
+		</script>
+		<?php
+	}
+
+	/**
+	 * Renderaj vsebino taba Promo diapozitiv (Primer B — Promo Diapozitivi)
+	 *
+	 * @param int   $post_id ID ekrana
+	 * @param array $meta    Asociativni array z meta podatki
+	 * @return void
+	 */
+	public static function render_promo_slide_content( $post_id, $meta ) {
+		$slide_posts        = get_posts( array(
+			'post_type'      => 'promo_slide',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+		) );
+		$selected_slide_ids = is_array( $meta['promo_slide_ids'] ) ? $meta['promo_slide_ids'] : array();
+		?>
+
 		<div class="snipi-field-group">
-			<h3><?php esc_html_e( 'Primer B — Promo Diapozitivi', 'snipi-ekrani' ); ?></h3>
+			<h3><?php esc_html_e( 'Promo Diapozitivi', 'snipi-ekrani' ); ?></h3>
 			<p class="description">
-				<?php esc_html_e( 'Celozaslonski diapozitivi iz knjižnice Promo Diapozitivi. Neodvisno od Primera A.', 'snipi-ekrani' ); ?>
+				<?php esc_html_e( 'Celozaslonski diapozitivi iz knjižnice Promo Diapozitivi. Neodvisno od Promo Objav.', 'snipi-ekrani' ); ?>
 			</p>
 
 			<!-- Izbira diapozitivov -->
@@ -215,7 +238,7 @@ class SNIPI_Admin_Promo_Tab {
 							printf(
 								wp_kses(
 									/* translators: %s: URL do dodajanja promo diapozitiva */
-									__( 'Ni promo diapozitivov. <a href="%s">Dodajte prvi promo diapozitiv</a> preden konfigurirate Primer B.', 'snipi-ekrani' ),
+									__( 'Ni promo diapozitivov. <a href="%s">Dodajte prvi promo diapozitiv</a> preden konfigurirate ta tab.', 'snipi-ekrani' ),
 									array( 'a' => array( 'href' => array() ) )
 								),
 								esc_url( admin_url( 'post-new.php?post_type=promo_slide' ) )
@@ -296,25 +319,6 @@ class SNIPI_Admin_Promo_Tab {
 				</p>
 			</div>
 		</div>
-
-		<!-- Inline JS: skrij tretjo kolono pri 2-kolonski postavitvi -->
-		<script>
-		( function () {
-			var layoutSelect = document.getElementById( 'snipi_promo_layout' );
-			var col3Row      = document.getElementById( 'snipi-promo-col3-row' );
-
-			if ( ! layoutSelect || ! col3Row ) {
-				return;
-			}
-
-			function toggleCol3() {
-				col3Row.style.display = ( layoutSelect.value === 'halves' ) ? 'none' : '';
-			}
-
-			layoutSelect.addEventListener( 'change', toggleCol3 );
-			toggleCol3();
-		}() );
-		</script>
 		<?php
 	}
 }

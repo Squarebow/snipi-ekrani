@@ -54,8 +54,8 @@ class SNIPI_Admin_Edit_Screen {
 		// Določi aktivni tab (default: nastavitve)
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'nastavitve';
 		
-		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje in promo
-		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo' ), true ) ) {
+		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje, promo_objave in promo
+		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo_objave', 'promo' ), true ) ) {
 			$active_tab = 'nastavitve';
 		}
 
@@ -93,8 +93,10 @@ class SNIPI_Admin_Edit_Screen {
 							SNIPI_Admin_Settings_Tab::render_content( $post_id, $meta );
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							SNIPI_Admin_Styling_Tab::render_content( $post_id, $meta );
+						} elseif ( 'promo_objave' === $active_tab ) {
+							SNIPI_Admin_Promo_Tab::render_promo_objave_content( $post_id, $meta );
 						} elseif ( 'promo' === $active_tab ) {
-							SNIPI_Admin_Promo_Tab::render_content( $post_id, $meta );
+							SNIPI_Admin_Promo_Tab::render_promo_slide_content( $post_id, $meta );
 						}
 						?>
 					</div>
@@ -107,8 +109,10 @@ class SNIPI_Admin_Edit_Screen {
 							self::render_settings_help();
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							self::render_styling_help();
+						} elseif ( 'promo_objave' === $active_tab ) {
+							self::render_promo_objave_help();
 						} elseif ( 'promo' === $active_tab ) {
-							self::render_promo_help();
+							self::render_promo_slide_help();
 						}
 						?>
 					</div>
@@ -136,9 +140,10 @@ class SNIPI_Admin_Edit_Screen {
 	protected static function render_tab_navigation( $post_id, $active_tab ) {
 		// Definicija tabov
 		$tabs = array(
-			'nastavitve'  => 'Nastavitve',
-			'oblikovanje' => 'Oblikovanje',
-			'promo'       => 'Promo diapozitiv',
+			'nastavitve'   => 'Nastavitve',
+			'oblikovanje'  => 'Oblikovanje',
+			'promo_objave' => 'Promo objave',
+			'promo'        => 'Promo diapozitiv',
 		);
 
 		echo '<h2 class="nav-tab-wrapper">';
@@ -313,34 +318,58 @@ class SNIPI_Admin_Edit_Screen {
 	}
 
 	/**
-	 * Renderaj help box za tab Promo diapozitiv
+	 * Renderaj help box za tab Promo objave
 	 *
 	 * @return void
 	 */
-	protected static function render_promo_help() {
+	protected static function render_promo_objave_help() {
 		?>
 		<div class="snipi-help-box">
-			<h3><i class="fas fa-images"></i> Navodila za promo vsebino</h3>
+			<h3><i class="fas fa-layer-group"></i> Navodila za Promo Objave</h3>
 
-			<h4><i class="fas fa-toggle-on"></i> Primer A in B sta neodvisna</h4>
-			<p>Primer A in Primer B sta <strong>popolnoma neodvisna</strong>. Vsak ima svoje stikalo. Vklop enega ne vklopi drugega — aktivna sta lahko oba hkrati, samo eden, ali nobeden.</p>
-
-			<h4><i class="fas fa-layer-group"></i> Primer A — Zapolnitev (Promo Objava)</h4>
+			<h4><i class="fas fa-layer-group"></i> Zapolnitev praznih vrstic</h4>
 			<p>Kolone s <strong>Promo Objavami</strong> se dodajo kot dodatna stran v rotacijo urnika, kadar na zadnji strani ostane vsaj toliko praznih vrstic, kot določa prag.</p>
+
+			<h4><i class="fas fa-sliders-h"></i> Nastavitve</h4>
 			<ul>
 				<li><strong>Trajanje:</strong> Koliko sekund je stran prikazana (5–30 s).</li>
 				<li><strong>Prag:</strong> Koliko praznih vrstic mora ostati (1–10). Nižja vrednost = pogostejši prikaz.</li>
 				<li><strong>Postavitev:</strong> Razmerje širin kolon (1/3, 1/4+1/2+1/4, ali 1/2).</li>
 			</ul>
 
-			<h4><i class="fas fa-film"></i> Primer B — Promo Diapozitivi</h4>
+			<h4><i class="fas fa-columns"></i> Kolone</h4>
+			<p>Vsaki koloni priredite eno <strong>Promo Objavo</strong> iz knjižnice. Promo objave urejate v meniju <strong>Promo objave</strong>.</p>
+			<p>Pri postavitvi "1/2 + 1/2" je tretja kolona skrita in ni na voljo.</p>
+
+			<h4><i class="fas fa-toggle-on"></i> Neodvisnost</h4>
+			<p>Ta tab je <strong>popolnoma neodvisen</strong> od taba Promo diapozitiv. Vsak ima svoje stikalo — aktivna sta lahko oba hkrati, samo eden, ali nobeden.</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Renderaj help box za tab Promo diapozitiv
+	 *
+	 * @return void
+	 */
+	protected static function render_promo_slide_help() {
+		?>
+		<div class="snipi-help-box">
+			<h3><i class="fas fa-film"></i> Navodila za Promo Diapozitive</h3>
+
+			<h4><i class="fas fa-film"></i> Celozaslonski diapozitivi</h4>
 			<p>Celozaslonski <strong>Promo Diapozitivi</strong> so oblikovani s polnim Gutenberg urejevalnikom. Upravljaš jih v meniju <strong>Promo diapozitivi</strong>.</p>
-			<p>Primer B ima <strong>dva neodvisna sprožilca</strong> — oba sta privzeto izklopljena:</p>
+
+			<h4><i class="fas fa-bolt"></i> Dva neodvisna sprožilca</h4>
+			<p>Oba sta privzeto izklopljena:</p>
 			<ul>
 				<li><strong>Po urniku:</strong> Diapozitivi se dodajo v rotacijo za zadnjo stranjo urnika. Urnik ostane viden.</li>
 				<li><strong>Ko ni dogodkov:</strong> Ko za ta dan ni nobenega dogodka, diapozitivi v celoti nadomestijo urnik. Privzeto <strong>izklopljeno</strong> — večja vizualna sprememba, vklopi šele ko je vsebina pripravljena.</li>
 			</ul>
 			<p>Oba sprožilca sta neodvisna — aktivna sta lahko oba hkrati.</p>
+
+			<h4><i class="fas fa-toggle-on"></i> Neodvisnost</h4>
+			<p>Ta tab je <strong>popolnoma neodvisen</strong> od taba Promo objave. Vsak ima svoje stikalo — aktivna sta lahko oba hkrati, samo eden, ali nobeden.</p>
 		</div>
 		<?php
 	}
