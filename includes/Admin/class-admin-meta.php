@@ -111,25 +111,35 @@ class SNIPI_Admin_Meta {
 		$promo_fill_enabled = isset( $_POST['snipi_promo_fill_enabled'] ) ? '1' : '0';
 		update_post_meta( $post_id, '_snipi_promo_fill_enabled', $promo_fill_enabled );
 
-		// Primer B: celozaslonski prikaz - checkbox (1 ali 0)
-		$promo_takeover_enabled = isset( $_POST['snipi_promo_takeover_enabled'] ) ? '1' : '0';
-		update_post_meta( $post_id, '_snipi_promo_takeover_enabled', $promo_takeover_enabled );
+		// Primer B: promo_slide rotacija — izbrani diapozitivi (array ID-jev)
+		$raw_slide_ids = isset( $_POST['snipi_promo_slide_ids'] ) && is_array( $_POST['snipi_promo_slide_ids'] )
+			? $_POST['snipi_promo_slide_ids']
+			: array();
+		$slide_ids = array();
+		foreach ( array_map( 'absint', $raw_slide_ids ) as $sid ) {
+			if ( ! $sid ) {
+				continue;
+			}
+			$slide_post = get_post( $sid );
+			if ( $slide_post && 'promo_slide' === $slide_post->post_type && 'publish' === $slide_post->post_status ) {
+				$slide_ids[] = $sid;
+			}
+		}
+		update_post_meta( $post_id, '_snipi_promo_slide_ids', $slide_ids );
 
-		// Primer B: barva ozadja - hex barva
-		if ( isset( $_POST['snipi_promo_takeover_bg_color'] ) ) {
-			$bg_color = sanitize_hex_color( wp_unslash( $_POST['snipi_promo_takeover_bg_color'] ) );
-			update_post_meta( $post_id, '_snipi_promo_takeover_bg_color', $bg_color ?: '' );
+		// Primer B: trajanje posameznega diapozitiva - sekunde med 10 in 60
+		if ( isset( $_POST['snipi_promo_slide_duration'] ) ) {
+			$slide_duration = max( 10, min( 60, intval( $_POST['snipi_promo_slide_duration'] ) ) );
+			update_post_meta( $post_id, '_snipi_promo_slide_duration', $slide_duration );
 		}
 
-		// Primer B: prikaži logotip - checkbox (1 ali 0)
-		$promo_takeover_show_logo = isset( $_POST['snipi_promo_takeover_show_logo'] ) ? '1' : '0';
-		update_post_meta( $post_id, '_snipi_promo_takeover_show_logo', $promo_takeover_show_logo );
+		// Primer B: prikaži kot dodaten diapozitiv v rotaciji - checkbox (1 ali 0)
+		$slide_show_in_rotation = isset( $_POST['snipi_promo_slide_show_in_rotation'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_slide_show_in_rotation', $slide_show_in_rotation );
 
-		// Primer B: neobvezni napis nad kolonami
-		if ( isset( $_POST['snipi_promo_takeover_heading'] ) ) {
-			$takeover_heading = sanitize_text_field( wp_unslash( $_POST['snipi_promo_takeover_heading'] ) );
-			update_post_meta( $post_id, '_snipi_promo_takeover_heading', $takeover_heading );
-		}
+		// Primer B: prikaži čez cel zaslon, ko ni dogodkov - checkbox (1 ali 0)
+		$slide_show_on_empty = isset( $_POST['snipi_promo_slide_show_on_empty'] ) ? '1' : '0';
+		update_post_meta( $post_id, '_snipi_promo_slide_show_on_empty', $slide_show_on_empty );
 
 		// Postavitev - whitelist validacija
 		if ( isset( $_POST['snipi_promo_layout'] ) ) {
@@ -194,10 +204,10 @@ class SNIPI_Admin_Meta {
 
 		// Promo diapozitiv (v2.4.0)
 		$promo_fill_enabled          = get_post_meta( $post_id, '_snipi_promo_fill_enabled', true );
-		$promo_takeover_enabled      = get_post_meta( $post_id, '_snipi_promo_takeover_enabled', true );
-		$promo_takeover_bg_color     = get_post_meta( $post_id, '_snipi_promo_takeover_bg_color', true );
-		$promo_takeover_show_logo    = get_post_meta( $post_id, '_snipi_promo_takeover_show_logo', true );
-		$promo_takeover_heading      = get_post_meta( $post_id, '_snipi_promo_takeover_heading', true );
+		$promo_slide_ids             = get_post_meta( $post_id, '_snipi_promo_slide_ids', true );
+		$promo_slide_duration        = get_post_meta( $post_id, '_snipi_promo_slide_duration', true );
+		$promo_slide_show_in_rotation = get_post_meta( $post_id, '_snipi_promo_slide_show_in_rotation', true );
+		$promo_slide_show_on_empty   = get_post_meta( $post_id, '_snipi_promo_slide_show_on_empty', true );
 		$promo_layout                = get_post_meta( $post_id, '_snipi_promo_layout', true );
 		$promo_col1_id               = get_post_meta( $post_id, '_snipi_promo_col1_id', true );
 		$promo_col2_id               = get_post_meta( $post_id, '_snipi_promo_col2_id', true );
@@ -218,13 +228,13 @@ class SNIPI_Admin_Meta {
 		$tv_confirm_dialog   = $tv_confirm_dialog !== '' ? $tv_confirm_dialog : '1';
 
 		// Promo defaults
-		$promo_takeover_enabled   = $promo_takeover_enabled !== '' ? $promo_takeover_enabled : '0';
-		$promo_takeover_bg_color  = is_string( $promo_takeover_bg_color ) ? $promo_takeover_bg_color : '';
-		$promo_takeover_show_logo = $promo_takeover_show_logo !== '' ? $promo_takeover_show_logo : '1';
-		$promo_takeover_heading   = is_string( $promo_takeover_heading ) ? $promo_takeover_heading : '';
-		$promo_layout             = $promo_layout ?: 'thirds';
-		$promo_duration           = max( 5, min( 30, intval( $promo_duration ?: 15 ) ) );
-		$promo_threshold          = max( 1, min( 10, intval( $promo_threshold ?: 3 ) ) );
+		$promo_slide_ids              = is_array( $promo_slide_ids ) ? $promo_slide_ids : array();
+		$promo_slide_duration         = max( 10, min( 60, intval( $promo_slide_duration ?: 20 ) ) );
+		$promo_slide_show_in_rotation = $promo_slide_show_in_rotation !== '' ? $promo_slide_show_in_rotation : '0';
+		$promo_slide_show_on_empty    = $promo_slide_show_on_empty !== '' ? $promo_slide_show_on_empty : '0';
+		$promo_layout                 = $promo_layout ?: 'thirds';
+		$promo_duration               = max( 5, min( 30, intval( $promo_duration ?: 15 ) ) );
+		$promo_threshold              = max( 1, min( 10, intval( $promo_threshold ?: 3 ) ) );
 
 		// Izračunaj število dogodkov za danes (če je API ključ nastavljen)
 		$today_events_count = null;
@@ -251,17 +261,17 @@ class SNIPI_Admin_Meta {
 			'tv_mode_override'    => $tv_mode_override,
 			'tv_confirm_dialog'   => $tv_confirm_dialog,
 			// Promo diapozitiv (v2.4.0)
-			'promo_fill_enabled'       => $promo_fill_enabled,
-			'promo_takeover_enabled'   => $promo_takeover_enabled,
-			'promo_takeover_bg_color'  => $promo_takeover_bg_color,
-			'promo_takeover_show_logo' => $promo_takeover_show_logo,
-			'promo_takeover_heading'   => $promo_takeover_heading,
-			'promo_layout'             => $promo_layout,
-			'promo_col1_id'            => intval( $promo_col1_id ),
-			'promo_col2_id'            => intval( $promo_col2_id ),
-			'promo_col3_id'            => intval( $promo_col3_id ),
-			'promo_duration'           => intval( $promo_duration ),
-			'promo_threshold'          => intval( $promo_threshold ),
+			'promo_fill_enabled'            => $promo_fill_enabled,
+			'promo_slide_ids'               => $promo_slide_ids,
+			'promo_slide_duration'          => intval( $promo_slide_duration ),
+			'promo_slide_show_in_rotation'  => $promo_slide_show_in_rotation,
+			'promo_slide_show_on_empty'     => $promo_slide_show_on_empty,
+			'promo_layout'                  => $promo_layout,
+			'promo_col1_id'                 => intval( $promo_col1_id ),
+			'promo_col2_id'                 => intval( $promo_col2_id ),
+			'promo_col3_id'                 => intval( $promo_col3_id ),
+			'promo_duration'                => intval( $promo_duration ),
+			'promo_threshold'               => intval( $promo_threshold ),
 		);
 	}
 

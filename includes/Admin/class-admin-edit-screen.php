@@ -320,31 +320,27 @@ class SNIPI_Admin_Edit_Screen {
 	protected static function render_promo_help() {
 		?>
 		<div class="snipi-help-box">
-			<h3><i class="fas fa-images"></i> Navodila za promo diapozitiv</h3>
+			<h3><i class="fas fa-images"></i> Navodila za promo vsebino</h3>
 
-			<h4><i class="fas fa-toggle-on"></i> Dva neodvisna primera</h4>
-			<p>Primer A in Primer B sta <strong>neodvisna</strong> — vsak ima svoje stikalo. Vklop enega ne vklopi drugega. Oba sta lahko vklopljena hkrati, ali samo eden, ali nobeden.</p>
+			<h4><i class="fas fa-toggle-on"></i> Primer A in B sta neodvisna</h4>
+			<p>Primer A in Primer B sta <strong>popolnoma neodvisna</strong>. Vsak ima svoje stikalo. Vklop enega ne vklopi drugega — aktivna sta lahko oba hkrati, samo eden, ali nobeden.</p>
 
-			<h4><i class="fas fa-layer-group"></i> Primer A — Zapolnitev</h4>
-			<p>Promo diapozitiv se doda kot <strong>dodatna stran</strong> v rotacijo urnika, kadar na zadnji strani ostane vsaj toliko praznih vrstic, kot določa prag. Urnik ostane viden — promo je zgolj dodaten diapozitiv.</p>
+			<h4><i class="fas fa-layer-group"></i> Primer A — Zapolnitev (Promo Objava)</h4>
+			<p>Kolone s <strong>Promo Objavami</strong> se dodajo kot dodatna stran v rotacijo urnika, kadar na zadnji strani ostane vsaj toliko praznih vrstic, kot določa prag.</p>
 			<ul>
-				<li><strong>Trajanje:</strong> Koliko sekund je promo prikazan (5–30 s).</li>
-				<li><strong>Prag praznih vrstic:</strong> Koliko praznih vrstic mora ostati na zadnji strani (1–10). Nižja vrednost = promo se prikaže pogosteje.</li>
+				<li><strong>Trajanje:</strong> Koliko sekund je stran prikazana (5–30 s).</li>
+				<li><strong>Prag:</strong> Koliko praznih vrstic mora ostati (1–10). Nižja vrednost = pogostejši prikaz.</li>
+				<li><strong>Postavitev:</strong> Razmerje širin kolon (1/3, 1/4+1/2+1/4, ali 1/2).</li>
 			</ul>
 
-			<h4><i class="fas fa-expand"></i> Primer B — Celozaslonski prikaz</h4>
-			<p>Ko za ta dan <strong>ni nobenega dogodka</strong>, promo v celoti nadomesti urnik. Ker gre za večjo vizualno spremembo, je ta možnost privzeto <strong>izklopljena</strong> — jo vklopi samo, ko si prepričan, da je vsebina promo objav pripravljena.</p>
-
-			<h4><i class="fas fa-th-large"></i> Postavitev kolon</h4>
-			<p>Velja za oba primera. Izberite razmerje širin za prikaz promo objav:</p>
+			<h4><i class="fas fa-film"></i> Primer B — Promo Diapozitivi</h4>
+			<p>Celozaslonski <strong>Promo Diapozitivi</strong> so oblikovani s polnim Gutenberg urejevalnikom. Upravljaš jih v meniju <strong>Promo diapozitivi</strong>.</p>
+			<p>Primer B ima <strong>dva neodvisna sprožilca</strong> — oba sta privzeto izklopljena:</p>
 			<ul>
-				<li><strong>1/3 + 1/3 + 1/3</strong> – enake tri kolone</li>
-				<li><strong>1/4 + 1/2 + 1/4</strong> – sredinska kolona je širša</li>
-				<li><strong>1/2 + 1/2</strong> – dve enaki koloni</li>
+				<li><strong>Po urniku:</strong> Diapozitivi se dodajo v rotacijo za zadnjo stranjo urnika. Urnik ostane viden.</li>
+				<li><strong>Ko ni dogodkov:</strong> Ko za ta dan ni nobenega dogodka, diapozitivi v celoti nadomestijo urnik. Privzeto <strong>izklopljeno</strong> — večja vizualna sprememba, vklopi šele ko je vsebina pripravljena.</li>
 			</ul>
-
-			<h4><i class="fas fa-photo-video"></i> Promo objave</h4>
-			<p>Promo objave upravljate v meniju <strong>Promo objave</strong>. Vsaka objava ima naslov, besedilo (do 200 znakov) in sliko. Iste promo objave so lahko dodeljene večim ekranom.</p>
+			<p>Oba sprožilca sta neodvisna — aktivna sta lahko oba hkrati.</p>
 		</div>
 		<?php
 	}
