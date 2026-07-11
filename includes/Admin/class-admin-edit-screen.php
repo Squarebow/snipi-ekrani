@@ -54,8 +54,8 @@ class SNIPI_Admin_Edit_Screen {
 		// Določi aktivni tab (default: nastavitve)
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'nastavitve';
 		
-		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje in promo_slide
-		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo_slide' ), true ) ) {
+		// Validiraj tab - dovoljeni samo nastavitve, oblikovanje in promo
+		if ( ! in_array( $active_tab, array( 'nastavitve', 'oblikovanje', 'promo' ), true ) ) {
 			$active_tab = 'nastavitve';
 		}
 
@@ -93,7 +93,7 @@ class SNIPI_Admin_Edit_Screen {
 							SNIPI_Admin_Settings_Tab::render_content( $post_id, $meta );
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							SNIPI_Admin_Styling_Tab::render_content( $post_id, $meta );
-						} elseif ( 'promo_slide' === $active_tab ) {
+						} elseif ( 'promo' === $active_tab ) {
 							SNIPI_Admin_Promo_Tab::render_content( $post_id, $meta );
 						}
 						?>
@@ -107,7 +107,7 @@ class SNIPI_Admin_Edit_Screen {
 							self::render_settings_help();
 						} elseif ( 'oblikovanje' === $active_tab ) {
 							self::render_styling_help();
-						} elseif ( 'promo_slide' === $active_tab ) {
+						} elseif ( 'promo' === $active_tab ) {
 							self::render_promo_help();
 						}
 						?>
@@ -138,7 +138,7 @@ class SNIPI_Admin_Edit_Screen {
 		$tabs = array(
 			'nastavitve'  => 'Nastavitve',
 			'oblikovanje' => 'Oblikovanje',
-			'promo_slide' => 'Promo diapozitiv',
+			'promo'       => 'Promo diapozitiv',
 		);
 
 		echo '<h2 class="nav-tab-wrapper">';
