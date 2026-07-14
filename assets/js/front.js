@@ -403,6 +403,8 @@
 						liveImg.className = 'snipi__live-indicator';
 						liveImg.src       = SNIPI_FRONT_REST.pluginUrl + 'assets/Live.svg';
 						liveImg.alt       = 'live';
+						liveImg.width     = 34;
+						liveImg.height    = 34;
 						timeWrapper.appendChild( liveImg );
 					}
 
