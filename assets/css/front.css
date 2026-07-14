@@ -227,24 +227,28 @@
 	white-space: nowrap;
 }
 
-/* Prepreči prelom v prvem stolpcu; referenčni blok za absolutno ikono */
+/* Prepreči prelom v prvem stolpcu */
 .snipi__table td:first-child {
 	white-space: nowrap;
-	position: relative;
 }
 
-/* Rezervira prostor desno za ikono, da ne prekriva časa */
-.snipi__table td.snipi__time-cell--live {
-	padding-right: calc( 42px * var(--snipi-row-scale) );
+/*
+ * Ko je vrstica live: wrapper postane inline-block referenčni blok za absolutno ikono.
+ * TD ne more biti referenčni blok v nekaterih TV brskalnikih (BrowseHere/TCL),
+ * zato ikono pozicioniramo znotraj div wrapperja.
+ */
+.snipi__time-wrapper--live {
+	display: inline-block;
+	position: relative;
+	padding-right: calc( 40px * var(--snipi-row-scale) );
 }
 
 /* Live event indicator: absolutno pozicioniran, ne vpliva na višino vrstice */
 .snipi__live-indicator {
 	position: absolute;
-	right:  calc( 4px * var(--snipi-row-scale) );
-	top:    0;
-	bottom: 0;
-	margin: auto;
+	right:  calc( 2px * var(--snipi-row-scale) );
+	top:    50%;
+	transform: translateY( -50% );
 	display: block;
 	width:  calc( 34px * var(--snipi-row-scale) );
 	height: calc( 34px * var(--snipi-row-scale) );

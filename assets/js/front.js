@@ -400,6 +400,7 @@
 					var endMs    = parseISOToMs( it.end_iso );
 					if ( startMs <= now.getTime() && endMs > now.getTime() ) {
 						tdTime.classList.add( 'snipi__time-cell--live' );
+						timeWrapper.classList.add( 'snipi__time-wrapper--live' );
 						var liveImg = document.createElement( 'img' );
 						liveImg.className = 'snipi__live-indicator';
 						liveImg.src       = SNIPI_FRONT_REST.pluginUrl + 'assets/Live.svg';
