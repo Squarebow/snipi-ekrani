@@ -2,6 +2,18 @@
 
 ---
 
+## [2.4.2] – 2026-07-14
+
+### Popravki
+
+- ✅ **Live indikator – pozicija na TV (BrowseHere/TCL)**: ikona se je prikazovala v stolpcu IZOBRAŽEVANJE namesto ČAS — nekateri TV brskalniki ne obravnavajo `<td>` kot referenčni blok za `position: absolute` otroke, zato je ikona ušla v napačen stolpec
+- ✅ **Live indikator – prelivanje čez mejo vrstice na desktop Chrome**: ikona je bila `position: absolute` znotraj kratkega `inline-block` wrapperja, kar jo je postavilo delno nad mejo celice
+- ✅ **Reševanje git merge konflikta v `front.css`**: preostale neurejene konfliktne oznake so povzročale dvojno kaskado CSS pravil
+- ✅ **SVG intrinsične dimenzije**: odstranjeni `width="64" height="64"` atributi iz `Live.svg` — TV brskalnik je ignoriral CSS velikost in prikazoval 64px ikono, kar je potrojilo višino živih vrstic
+- ✅ **Rešitev**: zamenjano absolutno pozicioniranje z `display: flex; align-items: center; justify-content: space-between` na wrapperju — ikona (24px) ostane v toku, je navpično centrirana in potisnjena desno, brez odvisnosti od vedenja referenčnega bloka tabele
+
+---
+
 ## [2.4.1] – 2026-07-11
 
 ### Admin – Promo tab razdeljen na dva samostojna taba
