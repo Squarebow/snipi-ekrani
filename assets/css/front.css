@@ -221,9 +221,9 @@
 	100% { opacity: 1;    transform: scale(1);    }
 }
 
-/* Časovni wrapper: inline – ne doda blokove višine vrstici */
+/* Časovni wrapper */
 .snipi__time-wrapper {
-	display: inline;
+	display: block;
 	white-space: nowrap;
 }
 
@@ -233,25 +233,23 @@
 }
 
 /*
- * Ko je vrstica live: wrapper postane inline-block referenčni blok za absolutno ikono.
- * TD ne more biti referenčni blok v nekaterih TV brskalnikih (BrowseHere/TCL),
- * zato ikono pozicioniramo znotraj div wrapperja.
+ * Ko je vrstica live: flex potisne ikono desno brez absolutnega pozicioniranja.
+ * Absolutno pozicioniranje se izogibamo, ker nekateri TV brskalniki (BrowseHere/TCL)
+ * ne obravnavajo <td> kot referenčni blok, ikona pa uide v napačen stolpec.
  */
 .snipi__time-wrapper--live {
-	display: inline-block;
-	position: relative;
-	padding-right: calc( 40px * var(--snipi-row-scale) );
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: calc( 8px * var(--snipi-row-scale) );
 }
 
-/* Live event indicator: absolutno pozicioniran, ne vpliva na višino vrstice */
+/* Live event indicator: v toku – SVG nima lastnih dimenzij, CSS določa velikost */
 .snipi__live-indicator {
-	position: absolute;
-	right:  calc( 2px * var(--snipi-row-scale) );
-	top:    50%;
-	transform: translateY( -50% );
 	display: block;
-	width:  calc( 34px * var(--snipi-row-scale) );
-	height: calc( 34px * var(--snipi-row-scale) );
+	flex-shrink: 0;
+	width:  calc( 24px * var(--snipi-row-scale) );
+	height: calc( 24px * var(--snipi-row-scale) );
 	object-fit: contain;
 	animation: snipi-pulse 1.6s ease-in-out infinite;
 }
