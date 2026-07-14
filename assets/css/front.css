@@ -221,30 +221,28 @@
 	100% { opacity: 1;    transform: scale(1);    }
 }
 
-/* Časovni wrapper: čas levo, live ikona desno */
+/* Časovni wrapper: inline – ne doda blokove višine vrstici */
 .snipi__time-wrapper {
-	display: flex;
-	align-items: center;
-	gap: 4px;
+	display: inline;
 	white-space: nowrap;
-	width: 100%;
-	overflow: hidden;
 }
 
-/* Prepreči prelom v prvem stolpcu */
+/* Prepreči prelom v prvem stolpcu; referenčni blok za absolutno ikono */
 .snipi__table td:first-child {
 	white-space: nowrap;
+	position: relative;
 }
 
-/* Live event indicator icon */
+/* Live event indicator: absolutno pozicioniran, ne vpliva na višino vrstice */
 .snipi__live-indicator {
+	position: absolute;
+	right:  calc( 4px * var(--snipi-row-scale) );
+	top:    0;
+	bottom: 0;
+	margin: auto;
 	display: block;
 	width:  calc( 34px * var(--snipi-row-scale) );
 	height: calc( 34px * var(--snipi-row-scale) );
 	object-fit: contain;
-	flex-shrink: 0;
-	margin-left: auto;
-	padding: 2px 4px;
-	box-sizing: border-box;
 	animation: snipi-pulse 1.6s ease-in-out infinite;
 }
