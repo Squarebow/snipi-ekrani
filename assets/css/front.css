@@ -233,6 +233,11 @@
 	position: relative;
 }
 
+/* Rezervira prostor desno za ikono, da ne prekriva časa */
+.snipi__table td.snipi__time-cell--live {
+	padding-right: calc( 42px * var(--snipi-row-scale) );
+}
+
 /* Live event indicator: absolutno pozicioniran, ne vpliva na višino vrstice */
 .snipi__live-indicator {
 	position: absolute;
