@@ -207,17 +207,12 @@
 	display: none;
 }
 
-<<<<<<< Updated upstream
 .snipi__bottom-row > * {
 	margin: 0;
 }
 
 /* ============================================================
-<<<<<<< Updated upstream
    LIVE EVENT INDICATOR
-   - Ikona je poravnana na desni rob celice s pravilnimi odmiki
-   - Večja in bolj vidna (34px)
-   - Utripajoča animacija
    ============================================================ */
 
 @keyframes snipi-pulse {
@@ -226,75 +221,29 @@
 	100% { opacity: 1;    transform: scale(1);    }
 }
 
-.snipi__live-indicator {
-	display: block;
-	width:  calc( 34px * var(--snipi-row-scale) );
-	height: calc( 34px * var(--snipi-row-scale) );
-	object-fit: contain;
-	flex-shrink: 0;
-	margin-left: auto;    /* potisne ikono na desni rob */
-	padding: 4px 6px 4px 10px;
-	box-sizing: content-box;
-	animation: snipi-pulse 1.6s ease-in-out infinite;
-}
-
 /* Časovni wrapper: čas levo, live ikona desno */
 .snipi__time-wrapper {
 	display: flex;
 	align-items: center;
 	gap: 4px;
 	white-space: nowrap;
-	line-height: 1.1;
 	width: 100%;
 }
-=======
-=======
-/* ============================================================
->>>>>>> Stashed changes
-   LIVE EVENT INDICATOR — using external Live.svg without row expansion
-   ============================================================ */
 
-/* Time + icon wrapper remain on one line */
-.snipi__time-wrapper {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-}
-
-/* Time text inline alignment */
-.snipi__time {
-    display: inline-block;
-    white-space: nowrap;
-}
-
-/* Never allow first TD to wrap */
+/* Prepreči prelom v prvem stolpcu */
 .snipi__table td:first-child {
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
-/* Live.svg container – fixed height = text height */
+/* Live event indicator icon */
 .snipi__live-indicator {
-    display: inline-flex;         /* consistent inline alignment */
-    align-items: center;          /* vertical centering */
-    justify-content: center;
-    margin-left: 6px;
-
-    height: 1.1em;                /* ← controls icon size safely */
-    width: 1.1em;                 /* square box to preserve proportions */
-
-    overflow: hidden;             /* prevents SVG from increasing row height */
-    flex-shrink: 0;               /* prevents collapse */
+	display: block;
+	width:  calc( 34px * var(--snipi-row-scale) );
+	height: calc( 34px * var(--snipi-row-scale) );
+	object-fit: contain;
+	flex-shrink: 0;
+	margin-left: auto;
+	padding: 2px 4px;
+	box-sizing: border-box;
+	animation: snipi-pulse 1.6s ease-in-out infinite;
 }
-
-/* Scale the SVG inside the fixed box */
-.snipi__live-indicator img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: block;               /* removes inline whitespace baseline issues */
-}
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
